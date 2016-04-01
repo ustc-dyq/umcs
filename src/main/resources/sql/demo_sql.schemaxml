@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="utf8" collation="utf8_general_ci">demo</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="user" view="colnames">
+<left>82</left>
+<top>13</top>
+<width>120</width>
+<height>194</height>
+<sql_create_table>CREATE TABLE `user` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(25) NOT NULL COMMENT '用户名',
+  `user_passwd` varchar(25) NOT NULL COMMENT '用户密码',
+  `user_priv` tinyint(4) NOT NULL DEFAULT '0' COMMENT '用户权限：0普通用户，1管理员账户',
+  `add_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '添加时间',
+  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
+  `del_flag` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标记，1代表删除',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `USER_NAME` (`user_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="login" view="colnames">
+<left>282</left>
+<top>30</top>
+<width>110</width>
+<height>160</height>
+<sql_create_table>CREATE TABLE `login` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `user_name` varchar(25) NOT NULL,
+  `is_online` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否在线，0不在线，1在线',
+  `del_flag` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `USER_ID` (`user_id`),
+  UNIQUE KEY `USER_NAME` (`user_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="login_log" view="colnames">
+<left>476</left>
+<top>20</top>
+<width>113</width>
+<height>177</height>
+<sql_create_table>CREATE TABLE `login_log` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `user_name` varchar(25) NOT NULL,
+  `login_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `logout_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `del_flag` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `USER_ID` (`user_id`),
+  KEY `USER_NAME` (`user_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="group" view="colnames">
+<left>705</left>
+<top>30</top>
+<width>138</width>
+<height>160</height>
+<sql_create_table>CREATE TABLE `group` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `group_name` varchar(25) NOT NULL COMMENT '组名',
+  `add_user_name` varchar(25) NOT NULL COMMENT '创建人姓名',
+  `add_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '添加时间',
+  `del_flag` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="group_member" view="colnames">
+<left>276</left>
+<top>265</top>
+<width>133</width>
+<height>194</height>
+<sql_create_table>CREATE TABLE `group_member` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
+  `group_name` varchar(25) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `user_name` varchar(25) NOT NULL COMMENT '成员名称',
+  `add_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `del_flag` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="head_img" view="colnames">
+<left>85</left>
+<top>260</top>
+<width>117</width>
+<height>194</height>
+<sql_create_table>CREATE TABLE `head_img` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `user_name` varchar(25) NOT NULL,
+  `img_url` varchar(128) NOT NULL COMMENT '头像保存的路径',
+  `add_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `del_flag` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `USER_ID` (`user_id`),
+  UNIQUE KEY `USER_NAME` (`user_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="send_msg" view="colnames">
+<left>457</left>
+<top>250</top>
+<width>159</width>
+<height>226</height>
+<sql_create_table>CREATE TABLE `send_msg` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `send_user_id` int(11) NOT NULL,
+  `send_user_name` varchar(25) NOT NULL,
+  `reciv_user_id` int(11) NOT NULL,
+  `reciv_user_name` varchar(25) NOT NULL,
+  `msg` varchar(256) NOT NULL COMMENT '发送的消息',
+  `msg_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '消息类型：1是文本，2是图片，3是其他文件',
+  `send_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `del_flag` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `USER_ID` (`send_user_id`),
+  KEY `USER_NAME` (`send_user_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="reciv_msg" view="colnames">
+<left>709</left>
+<top>243</top>
+<width>149</width>
+<height>228</height>
+<sql_create_table>CREATE TABLE `reciv_msg` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `send_user_id` int(11) NOT NULL,
+  `send_user_name` varchar(25) NOT NULL,
+  `reciv_user_id` int(11) NOT NULL,
+  `reciv_user_name` varchar(25) NOT NULL,
+  `msg` varchar(256) NOT NULL DEFAULT '',
+  `msg_type` tinyint(4) NOT NULL DEFAULT '1',
+  `reciv_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `is_read` tinyint(4) DEFAULT '0',
+  `del_flag` tinyint(4) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>

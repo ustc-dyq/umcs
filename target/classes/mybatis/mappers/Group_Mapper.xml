@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.keda.webDemo.umcs.dao.Group">
+	<resultMap type="com.keda.webDemo.umcs.dao.dto.Group" id="group">
+		<id property="id" column="id" />
+		<result property="groupName" column="group_name" />
+		<result property="addUserId" column="add_user_id" />
+		<result property="addTime" column="add_time" />
+		<result property="updateTime" column="update_time" />
+		<result property="delFlag" column="del_flag" />
+	</resultMap>
+	<select id="select" resultMap="group">
+		select id,group_name,add_user_id,add_time,update_time
+		from groupinfo where id = #{id} and del_flag = 0
+	</select>
+	<select id="selectAll" resultMap="group">
+		select id,group_name,add_user_id,add_time,update_time
+		from groupinfo where del_flag = 0
+	</select>
+	<select id="selectByGroupName" resultMap="group">
+		select id,group_name,add_user_id,add_time,update_time
+		from groupinfo where
+		group_name = #{groupName} and del_flag = 0
+	</select>
+	<insert id="insert" parameterType="com.keda.webDemo.umcs.dao.dto.Group">
+		insert into groupinfo
+		(group_name,add_user_id,add_time)
+		values
+		(#{groupName},#{addUserId},#{addTime});
+	</insert>
+	<update id="update" parameterType="com.keda.webDemo.umcs.dao.dto.Group">
+		update groupinfo set
+		<if test="groupName != null and groupName != ''">
+			group_name = #{groupName},
+		</if>
+		<if test="updateTime != null and updateTime != ''">
+			update_time = #{updateTime},
+		</if>
+		where id = #{id}
+	</update>
+	<update id="delete" parameterType="java.lang.Integer">
+		update groupinfo set
+		del_flag=1
+		where id = #{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from groupinfo
+		where id = #{id}
+	</delete>
+</mapper>
