@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>展示</title>
+<script type="text/javascript" src="js/jquery-2.2.2.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/layer.js"></script> 
+<script type="text/javascript" src="js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="js/base.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/display.js"></script>
+<link href="css/display.css" rel="stylesheet" type="text/css" />
+</head>
+<body onbeforeunload="logout()">
+
+
+<div id="head">
+<h1>科达用户管理平台</h1>
+</div>
+<div id="left">
+<button id="userInfo" type="button" onclick="createUserPage()">个人信息</button>
+<p>
+<button id="group" type="button" onclick="createGroupPage()">分组列表</button>
+<p>
+<button id="friend" type="button" onclick="createfriendPage()">好友列表</button>
+</div>
+<div id="right">
+</div>
+
+
+</body>
+</html>

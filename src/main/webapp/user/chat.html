@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv=”X-UA-Compatible” content=”IE=edge,chrome=1″/>
+<title>聊天室</title>
+<script type="text/javascript" src="js/jquery-2.2.2.js"></script>
+<script type="text/javascript" src="js/chat.js"></script>
+<script type="text/javascript" src="js/ajaxfileupload.js"></script>
+<link href="css/chat.css" rel="stylesheet" type="text/css" />
+</head>
+<body onload="load()">
+<div id="container">
+<div id="left">
+<input id="recivUserName" name="recivUserName" style="width:500px; height:40px;" readonly>
+<br>
+<textarea id="text" name="text" style="width:500px; height:300px;" readonly></textarea>
+<p>
+<textarea id="msg" name="msg" style="width:500px; height:100px;"></textarea>
+<p>
+<button type="button" onclick="sendMsg()">发送消息</button>
+<button type="button" onclick="clearText()">清空消息</button>
+<input id="file" name="file" type="file" style="width:70px;" onchange="uploadFile()">
+<button type="button" onclick="queryMore()">查看更多</button>
+</div>
+<div id="right">
+</div>
+</div>
+</body>
+</html>

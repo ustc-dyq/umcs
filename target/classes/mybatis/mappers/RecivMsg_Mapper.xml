@@ -11,9 +11,12 @@
 		<result property="msgType" column="msg_type" />
 		<result property="recivTime" column="reciv_time" />
 	</resultMap>
-	<select id="selectByRecivUserId" resultMap="recivMsg">
+	<select id="selectByUserId" resultMap="recivMsg">
 		select id,send_user_id,reciv_user_id,msg,msg_type,reciv_time
-		from reciv_msg where reciv_user_id = #{recivUserId};
+		from reciv_msg where reciv_user_id = #{recivUserId}
+		<if test="sendUserId != null">
+			and send_user_id = #{sendUserId}
+		</if>
 	</select>
 	
 	<insert id="insert" parameterType="com.keda.webDemo.umcs.dao.dto.RecivMsg">

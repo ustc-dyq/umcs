@@ -22,10 +22,18 @@ public interface UserService {
 	public boolean verify(String userName, String userPasswd);
 	
 	/**
+	 * 预登陆
+	 * @param user
+	 */
+	public User preLogin(String userName, String userPasswd) throws RepeatException;
+	
+	/**
 	 * 登陆
 	 * @param user
 	 */
-	public User login(String userName, String userPasswd);
+	public User login(String userName, String userPasswd) throws RepeatException;
+	
+	
 	
 	/**
 	 * 登出
@@ -43,7 +51,7 @@ public interface UserService {
 	 * 更改用户信息
 	 * @param user
 	 */
-	public boolean changeUser(User user);
+	public User changeUser(User user);
 	
 	/**
 	 * 删除用户
@@ -70,6 +78,12 @@ public interface UserService {
 	 * @return
 	 */
 	public List<User> getAllUser();
+	
+	/**
+	 * 获取所有用户信息
+	 * @return
+	 */
+	public List<User> getAllManages();
 	
 	/**
 	 * 获取同组好友

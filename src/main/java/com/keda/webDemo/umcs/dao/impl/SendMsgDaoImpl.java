@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -37,9 +38,9 @@ public class SendMsgDaoImpl implements SendMsgDao {
 	 * @see com.keda.webDemo.umcs.dao.SendMsgDao#selectByUser(com.keda.webDemo.umcs.dao.dto.SendMsg)
 	 */
 	@Override
-	public List<SendMsg> selectByUserId(SendMsg sendMsg) {
+	public List<SendMsg> selectByUserId(SendMsg sendMsg, RowBounds rowBounds) {
 		
-		return sqlSession.selectList("com.keda.webDemo.umcs.dao.SendMsg.selectByUserId",sendMsg);
+		return sqlSession.selectList("com.keda.webDemo.umcs.dao.SendMsg.selectByUserId",sendMsg,rowBounds);
 	
 	}
 
@@ -61,6 +62,14 @@ public class SendMsgDaoImpl implements SendMsgDao {
 		
 		return sqlSession.update("com.keda.webDemo.umcs.dao.SendMsg.delete",id);
 	
+	}
+
+	/* (non-Javadoc)
+	 * @see com.keda.webDemo.umcs.dao.SendMsgDao#selectCount(com.keda.webDemo.umcs.dao.dto.SendMsg)
+	 */
+	@Override
+	public int selectCount(SendMsg sendMsg) {
+		return sqlSession.selectOne("com.keda.webDemo.umcs.dao.SendMsg.selectCount",sendMsg);
 	}
 
 }

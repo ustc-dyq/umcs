@@ -54,9 +54,12 @@ public class UserServiceImpl implements UserService {
 		if(null == user) {
 			log.info("用户名或密码错误，验证失败");
 			return false;
+		} else {
+			user.setUpdateTime(new Date());
+			userDao.update(user);
+			return true;
 		}
 		
-		return true;
 		
 	}
 
@@ -64,12 +67,33 @@ public class UserServiceImpl implements UserService {
 	 * @see com.keda.webDemo.umcs.service.UserService#login(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public User login(String userName, String userPasswd) {
+	public User preLogin(String userName, String userPasswd) throws RepeatException{
 		
 		User user = new User();
 		user.setUserName(userName);
 		user.setUserPasswd(userPasswd);
 		user = userDao.selectByUser(user);
+		if(Constants.LOGIN == user.getIsOnline()) {
+			throw new RepeatException("请勿重复登录！");
+		}
+		
+		return user;
+		
+	}
+	
+	/* 
+	 * @see com.keda.webDemo.umcs.service.UserService#login(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public User login(String userName, String userPasswd) throws RepeatException{
+		
+		User user = new User();
+		user.setUserName(userName);
+		user.setUserPasswd(userPasswd);
+		user = userDao.selectByUser(user);
+		if(Constants.LOGIN == user.getIsOnline()) {
+			throw new RepeatException("请勿重复登录！");
+		}
 		user.setIsOnline(Constants.LOGIN);
 		userDao.update(user);
 		return user;
@@ -84,6 +108,7 @@ public class UserServiceImpl implements UserService {
 		
 		User user = userDao.select(userId);
 		user.setIsOnline(Constants.LOGOUT);
+		user.setUpdateTime(new Date());
 		userDao.update(user);
 		
 	}
@@ -103,6 +128,8 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		user.setUserPasswd(userPasswd);
+		user.setGroupId(Constants.NOTINGROUP);
+		user.setUserPriv(Constants.NORMALPRIV);
 		user.setAddTime(new Date());
 		userDao.insert(user);
 		
@@ -114,16 +141,10 @@ public class UserServiceImpl implements UserService {
 	 * @see com.keda.webDemo.umcs.service.UserService#changeUser(com.keda.webDemo.umcs.dao.dto.User)
 	 */
 	@Override
-	public boolean changeUser(User user) {
-		
-		if(null == user || 0 < user.getId()) {
-			log.info("用户参数缺失，修改数据失败");
-			return false;
-		}
+	public User changeUser(User user) {
 		
 		userDao.update(user);
-		
-		return true;
+		return user;
 		
 	}
 
@@ -182,6 +203,16 @@ public class UserServiceImpl implements UserService {
 	public List<User> queryByGroupId(int groupId) {
 		
 		return userDao.selectByGroupId(groupId);
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.keda.webDemo.umcs.service.UserService#getAllManages()
+	 */
+	@Override
+	public List<User> getAllManages() {
+		
+		return userDao.selectAllManages();
 		
 	}
 

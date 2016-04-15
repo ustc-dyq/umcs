@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import com.keda.webDemo.umcs.dao.GroupDao;
 import com.keda.webDemo.umcs.dao.UserDao;
 import com.keda.webDemo.umcs.dao.dto.Group;
-import com.keda.webDemo.umcs.dao.dto.User;
 import com.keda.webDemo.umcs.service.GroupService;
 
 @Service
@@ -59,10 +58,6 @@ public class GroupServiceImpl implements GroupService{
 	@Override
 	public List<Group> queryAllGroups() {
 		List<Group> groups = groupDao.selectAll();
-		for(Group group : groups) {
-			List<User> users = userDao.selectByGroupId(group.getId());
-			group.setUsers(users);
-		}
 		return groups;
 		
 	}
@@ -77,6 +72,16 @@ public class GroupServiceImpl implements GroupService{
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.keda.webDemo.umcs.service.UserService#queryByGroupName(String)
+	 */
+	@Override
+	public Group queryByGroupName(String groupName) {
+		
+		return groupDao.selectByGroupName(groupName);
+		
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.keda.webDemo.umcs.service.UserService#deleteGroup(int)
 	 */

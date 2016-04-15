@@ -13,17 +13,30 @@
 		<result property="delFlag" column="del_flag" />
 	</resultMap>
 	<select id="select" resultMap="sendMsg">
-		select id,send_user_id,reciv_user_id,msg,msg_type
+		select id,send_user_id,reciv_user_id,msg,msg_type,send_time
 		from send_msg where id = #{id} and del_flag = 0;
 	</select>
-	<select id="selectByUserId" resultMap="sendMsg">
-		select id,send_user_id,reciv_user_id,msg,msg_type
+	
+	<select id="selectCount" resultType="java.lang.Integer">
+		select count(id)
 		from send_msg where
-		
-		<if test="sendUserId != null and sendUserId != ''">
+		<if test="sendUserId != null">
 			send_user_id = #{sendUserId} and
 		</if>
-		<if test="recivUserId != null and recivUserId != ''">
+		<if test="recivUserId != null">
+			reciv_user_id = #{recivUserId} and
+		</if> 
+		del_flag = 0;
+	</select>
+	
+	<select id="selectByUserId" resultMap="sendMsg">
+		select id,send_user_id,reciv_user_id,msg,msg_type,send_time
+		from send_msg where
+		
+		<if test="sendUserId != null">
+			send_user_id = #{sendUserId} and
+		</if>
+		<if test="recivUserId != null">
 			reciv_user_id = #{recivUserId} and
 		</if>
 		del_flag = 0

@@ -8,7 +8,6 @@
 package com.keda.webDemo.umcs.dao.dto;
 
 import java.util.Date;
-import java.util.List;
 
 public class Group {
 
@@ -16,7 +15,7 @@ public class Group {
 	private String groupName;       //分组名
 	private Integer addUserId;     //创建人名称
 	private Date addTime;	        //创建时间
-	private List<User> users;
+	private Date updateTime;
 	private Integer delFlag;
 	
 	/**
@@ -74,19 +73,19 @@ public class Group {
 	public void setAddTime(Date addTime) {
 		this.addTime = addTime;
 	}
-	
+		
 	/**
-	 * @return the user
+	 * @return the updateTime
 	 */
-	public List<User> getUsers() {
-		return users;
+	public Date getUpdateTime() {
+		return updateTime;
 	}
 
 	/**
-	 * @param user the user to set
+	 * @param updateTime the updateTime to set
 	 */
-	public void setUsers(List<User> users) {
-		this.users = users;
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
 	/**

@@ -1,0 +1,102 @@
+body {
+	background-image: url(/webDemo/img/show.jpg);
+	background-size:100%;
+}
+
+.div1 {
+	float: left;
+	height: 41px;
+	background: #f5696c;
+	width: 120px;
+	position: relative;
+}
+
+.div2 {
+	text-align: center;
+	padding-top: 12px;
+	font-size: 15px;
+	font-weight: 800
+}
+
+.inputstyle {
+	width: 120px;
+	height: 41px;
+	cursor: pointer;
+	font-size: 30px;
+	outline: medium none;
+	position: absolute;
+	filter: alpha(opacity = 0);
+	-moz-opacity: 0;
+	opacity: 0;
+	left: 0px;
+	top: 0px;
+}
+
+div#container {
+	width: 700px;
+}
+
+div#header {
+	height: 220px;
+	width: 120px;
+	float: left;
+}
+
+div#menu {
+	
+	height: auto;
+	width: 260px;
+	float: left;
+}
+
+div#content {
+	
+	height: auto;
+	width: 440px;
+	float: left;
+}
+
+div#friends {
+	
+	height: auto;
+	width: 700px;
+	float: left;
+}
+
+div#files {
+	background-color: #ff7575;
+	height: auto;
+	width: 700px;
+	float: left;
+}
+
+div#footer {
+	background-color: #99bbbb;
+	clear: both;
+	text-align: center;
+}
+
+div#newUser {
+	
+	height: 220px;
+	width: 580px;
+	float: left;
+	text-align: center;
+}
+
+h1 {
+	margin-bottom: 0;
+}
+
+h2 {
+	margin-bottom: 0;
+	font-size: 14px;
+}
+
+ul {
+	margin: 0;
+}
+
+li {
+	list-style: none;
+}

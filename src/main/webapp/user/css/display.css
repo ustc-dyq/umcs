@@ -1,0 +1,226 @@
+body {
+	background-image: url(/user/img/show.jpg);
+	background-size: 100%;
+	text-align: center
+}
+
+div#head {
+	margin: 0 auto;
+	height: 100px;
+}
+
+div#left {
+	position: absolute;
+	margin: 0 auto;
+	width: 20%;
+	height: 500px;
+	margin-left: 10%;
+	float: left
+}
+
+div#right {
+	position: absolute;
+	margin: 0 auto;
+	width: 60%;
+	height: 500px;
+	margin-left: 30%;
+	float: left;
+	border: 1px solid #c0c0c0
+}
+
+div#headImg {
+	width: 120px;
+	float: left;
+}
+
+div#userInfo {
+	padding-top: 1cm;
+	width: 338px;
+	height: 200px;
+	margin-left: 10%;
+	float: left;
+	display: table;
+	border: 1px solid #ffffff;
+	/* for IE */
+	filter: alpha(opacity = 60);
+	/* CSS3 standard */
+	opacity: 0.6;
+}
+
+div#newUser {
+	padding-top: 1cm;
+	height: 30px;
+	width: 90%;
+	margin-left: 5%;
+	float: left;
+	display: table;
+}
+
+div#newGroup {
+	padding-top: 1cm;
+	height: 50px;
+	margin-left: 10%;
+	float: left;
+	display: table;
+}
+
+div#groupList {
+	width: 60%;
+	margin-left: 10%;
+	float: left;
+	display: table;
+	overflow: scroll;
+}
+
+div#friends {
+	padding-top: 1cm;
+	margin-left: 10%;
+	float: left;
+	width: 80%;
+	height: 60%;
+}
+
+#groupName {
+	height: 25px;
+	width: 30%;
+}
+
+#createGroup {
+	height: 30px;
+	width: 30%;
+	font-family: 微软雅黑, 宋体;
+	font-size: 15px;
+	color: #008000;
+	background-color: transparent;
+}
+
+#createUser {
+	height: 30px;
+	width: 20%;
+	font-family: 微软雅黑, 宋体;
+	font-size: 15px;
+	color: #008000;
+	background-color: transparent;
+}
+
+#save {
+	height: 30px;
+	width: 100%;
+	font-family: 微软雅黑, 宋体;
+	font-size: 15px;
+	color: #008000;
+	background-color: transparent;
+}
+
+#delete {
+	height: 30px;
+	width: 100%;
+	font-family: 微软雅黑, 宋体;
+	font-size: 15px;
+	color: #008000;
+	background-color: transparent;
+}
+
+#chat {
+	height: 30px;
+	width: 100%;
+	font-family: 微软雅黑, 宋体;
+	font-size: 15px;
+	color: #008000;
+	background-color: transparent;
+}
+
+#changeUser {
+	height: 40px;
+	width: 300px;
+	background-color: #00ff00;
+}
+
+#name {
+	height: 25px;
+	width: 20%;
+}
+
+#passwd {
+	height: 25px;
+	width: 20%;
+}
+
+#newName {
+	height: 25px;
+	width: 150px;
+}
+
+#newPasswd {
+	height: 25px;
+	width: 150px;
+}
+
+.div1 {
+	float: left;
+	height: 41px;
+	background: #f5696c;
+	width: 120px;
+	position: relative;
+}
+
+.div3 {
+	float: left;
+	height: 41px;
+	background: #ffff00;
+	width: 120px;
+	position: relative;
+}
+
+.div2 {
+	text-align: center;
+	padding-top: 12px;
+	font-size: 15px;
+	font-weight: 800
+}
+
+.inputstyle {
+	width: 120px;
+	height: 41px;
+	cursor: pointer;
+	font-size: 30px;
+	outline: medium none;
+	position: absolute;
+	filter: alpha(opacity = 0);
+	-moz-opacity: 0;
+	opacity: 0;
+	left: 0px;
+	top: 0px;
+}
+
+#userInfo {
+	height: 40px;
+	width: 90%;
+	font-family: 微软雅黑, 宋体;
+	font-size: 20px;
+	color: #008000;
+	background-color: transparent;
+}
+
+#group {
+	height: 40px;
+	width: 90%;
+	font-family: 微软雅黑, 宋体;
+	font-size: 20px;
+	color: #008000;
+	background-color: transparent;
+}
+
+#friend {
+	height: 40px;
+	width: 90%;
+	font-size: 20px;
+	font-family: 微软雅黑, 宋体;
+	color: #008000;
+	background-color: transparent;
+}
+
+h1 {
+	font-family: 微软雅黑, 宋体;
+	color: #008000;
+}

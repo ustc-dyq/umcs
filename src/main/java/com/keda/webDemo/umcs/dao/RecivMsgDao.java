@@ -18,7 +18,7 @@ public interface RecivMsgDao {
 	 * @param id
 	 * @return
 	 */
-	public List<RecivMsg> selectByRecivUserId(int recivUserId);
+	public List<RecivMsg> selectByUserId(RecivMsg recivMsg);
 	
 	/**
 	 * 保存接收到的信息

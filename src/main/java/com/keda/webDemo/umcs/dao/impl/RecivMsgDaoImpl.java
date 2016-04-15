@@ -27,9 +27,9 @@ public class RecivMsgDaoImpl implements RecivMsgDao {
 	 * @see com.keda.webDemo.umcs.dao.RecivMsgDao#select(int)
 	 */
 	@Override
-	public List<RecivMsg> selectByRecivUserId(int recivUserId) {
+	public List<RecivMsg> selectByUserId(RecivMsg recivMsg) {
 		
-		return sqlSession.selectList("com.keda.webDemo.umcs.dao.RecivMsg.selectNotRead",recivUserId);
+		return sqlSession.selectList("com.keda.webDemo.umcs.dao.RecivMsg.selectByUserId",recivMsg);
 	
 	}
 

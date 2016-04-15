@@ -35,9 +35,10 @@
 		<if test="groupName != null and groupName != ''">
 			group_name = #{groupName},
 		</if>
-		<if test="updateTime != null and updateTime != ''">
+		<if test="updateTime != null">
 			update_time = #{updateTime},
 		</if>
+		del_flag=0
 		where id = #{id}
 	</update>
 	<update id="delete" parameterType="java.lang.Integer">

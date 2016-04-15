@@ -13,7 +13,7 @@
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%-4relative [%thread] %-5level %logger{35} ： %msg%n</pattern>
+            <pattern>%d{mm:ss} %-4relative [%thread] %-5level %logger{35} ： %msg%n</pattern>
         </encoder>
     </appender>
     <!--指定logger name为包名或类全名 指定级别 additivity设置是否传递到root logger -->

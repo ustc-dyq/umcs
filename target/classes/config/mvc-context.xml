@@ -2,8 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans    
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd    
     http://www.springframework.org/schema/tx    
@@ -13,16 +13,18 @@
     http://www.springframework.org/schema/mvc   
     http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
     http://www.springframework.org/schema/aop
-    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+    http://www.springframework.org/schema/websocket
+    http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 
 
 	<!-- 自动扫描的包名 -->
 	<context:component-scan base-package="com.keda.webDemo.umcs"></context:component-scan>
-    <aop:aspectj-autoproxy/>  <!-- 要添加本行 -->
-    
+	<aop:aspectj-autoproxy />  <!-- 要添加本行 -->
+
 	<!-- 默认的注解映射的支持 -->
 	<mvc:annotation-driven />
-	<mvc:resources location="/webDemo/" mapping="/webDemo/**" />
+	<mvc:resources location="/user/" mapping="/user/**" />
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		id="internalResourceViewResolver">
@@ -31,6 +33,16 @@
 		<!-- 后缀 -->
 		<property name="suffix" value=".jsp" />
 	</bean>
+
+	<bean id="websocket" class="com.keda.webDemo.umcs.websocket.WebsocketEndPoint" />
+
+	<websocket:handlers>
+		<websocket:mapping path="/websocket" handler="websocket" />
+		<websocket:handshake-interceptors>
+			<bean class="com.keda.webDemo.umcs.websocket.HandshakeInterceptor" />
+		</websocket:handshake-interceptors>
+	</websocket:handlers>
+
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding" value="utf-8"></property>

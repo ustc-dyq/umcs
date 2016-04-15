@@ -92,6 +92,14 @@ public class UserDaoImpl implements UserDao {
 		return sqlSession.update("com.keda.webDemo.umcs.dao.User.delete",id);
 	
 	}
+
+	/* (non-Javadoc)
+	 * @see com.keda.webDemo.umcs.dao.UserDao#selectAllManages()
+	 */
+	@Override
+	public List<User> selectAllManages() {
+		return sqlSession.selectList("com.keda.webDemo.umcs.dao.User.selectAllManages");
+	}
 	
 	
 }

@@ -1,0 +1,122 @@
+div#container {
+	width: 500px;
+	height: 575px;
+	border: 1px solid #8080c0;
+}
+
+.tip {
+	width: 100px;
+	height: 18px;
+	background-color: #ffff80;
+	border: 1px solid #000000;
+	text-align: center;
+	vertical-align: middle;
+	position: absolute;	
+	font-family: 微软雅黑, 宋体;
+	font-size: 10px;
+	display: none;	
+}
+
+div#top {
+	width: 500px;
+	height: 400px;
+}
+
+div#middle {
+	width: 500px;
+	height: 40px;
+	background-color: #d7cfe0;
+}
+
+div#bottom {
+	width: 500px;
+	height: 130px;
+}
+
+div#showText {
+	width: 500px;
+	height: 400px;
+	overflow-y: auto;
+}
+
+div#inputText {
+	width: 500px;
+	height: 100px;
+	overflow-y: auto;
+}
+div#operation {
+	width: 500px;
+	height: 35px;
+	background-color: #d7cfe0;
+}
+div#openImg {
+	width: 40px;
+	height: 40px;
+	background-image: url(../img/openImg.jpg);
+	background-size: 40px 40px;
+	position: absolute;
+	left: 10%;
+	
+}
+
+div#openFile {
+	width: 40px;
+	height: 40px;
+	background-image: url(../img/openFile.jpg);
+	background-size: 40px 40px;
+	position: absolute;
+	left: 15%;
+	
+}
+
+div#openMsg {
+	width: 40px;
+	height: 40px;
+	background-image: url(../img/openMsg.jpg);
+	background-size: 40px 40px;
+	position: absolute;
+	left: 20%;
+	
+}
+
+div#sendMsg {
+	width: 100px;
+	height: 35px;
+	margin:0 auto;
+	background-color: #53a9ff;
+	text-align: center;
+	vertical-align: middle;
+	font-family: 微软雅黑, 宋体;
+	font-size: 20px;
+	color:#ffffff;
+	position: relative;
+	float: right;
+}
+
+#send {
+	width: 100px;
+	height: 35px;
+	cursor: pointer;
+	font-size: auto;
+	outline: medium none;
+	position: absolute;
+	filter: alpha(opacity = 0);
+	-moz-opacity: 0;
+	opacity: 0;
+	left: 0px;
+	top: 0px;
+}
+
+.inputstyle {
+	width: 40px;
+	height: 40px;
+	cursor: pointer;
+	font-size: auto;
+	outline: medium none;
+	position: absolute;
+	filter: alpha(opacity = 0);
+	-moz-opacity: 0;
+	opacity: 0;
+	left: 0px;
+	top: 0px;
+}

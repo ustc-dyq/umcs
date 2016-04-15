@@ -16,7 +16,7 @@ public class User {
 	private String userPasswd;   //用户密码
 	private Integer userPriv;        //用户权限，0是普通用户，1是管理员
 	private Integer groupId;         //用户所在分组
-	private String imgPath;         //头像路径
+	private String imgName;         //头像路径
 	private Integer isOnline;         //用户是否在线
 	private Date addTime;        //添加时间
 	private Date updateTime;     //更新时间
@@ -107,17 +107,17 @@ public class User {
 	}
 
 	/**
-	 * @return the imgPath
+	 * @return the imgName
 	 */
-	public String getImgPath() {
-		return imgPath;
+	public String getImgName() {
+		return imgName;
 	}
 
 	/**
-	 * @param imgPath the imgPath to set
+	 * @param imgName the imgName to set
 	 */
-	public void setImgPath(String imgPath) {
-		this.imgPath = imgPath;
+	public void setImgName(String imgName) {
+		this.imgName = imgName;
 	}
 
 	/**

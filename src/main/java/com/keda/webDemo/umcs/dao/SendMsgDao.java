@@ -9,6 +9,8 @@ package com.keda.webDemo.umcs.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
+
 import com.keda.webDemo.umcs.dao.dto.SendMsg;
 
 public interface SendMsgDao {
@@ -21,11 +23,18 @@ public interface SendMsgDao {
 	public SendMsg select(int id);
 	
 	/**
+	 * 查询消息数量
+	 * @param id
+	 * @return
+	 */
+	public int selectCount(SendMsg sendMsg);
+	
+	/**
 	 * 根据发送人或者接收人查询消息
 	 * @param sendMsg
 	 * @return
 	 */
-	public List<SendMsg> selectByUserId(SendMsg sendMsg);
+	public List<SendMsg> selectByUserId(SendMsg sendMsg, RowBounds rowBounds);
 	
 	/**
 	 * 保存发送的消息

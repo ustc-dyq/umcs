@@ -39,6 +39,8 @@ public interface GroupService {
 	 */
 	public Group queryByGroupId(int groupId);
 	
+	public Group queryByGroupName(String groupName);
+	
 	/**
 	 * 删除分组
 	 * @param groupId

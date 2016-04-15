@@ -10,21 +10,27 @@
 		<result property="userPriv" column="user_priv" />
 		<result property="groupId" column="group_id" />
 		<result property="isOnline" column="is_online" />
-		<result property="imgPath" column="img_path" />
+		<result property="imgName" column="img_name" />
 		<result property="addTime" column="add_time" />
 		<result property="updateTime" column="update_time" />
 		<result property="delFlag" column="del_flag" />
 	</resultMap>
 	<select id="select" resultMap="user">
-		select id,user_name,user_passwd,user_priv,group_id,is_online,img_path,add_time,update_time
+		select id,user_name,user_passwd,user_priv,group_id,is_online,img_name,add_time,update_time
 		from user where id = #{id} and del_flag = 0;
 	</select>
 	<select id="selectAll" resultMap="user">
-		select id,user_name,user_passwd,user_priv,group_id,is_online,img_path,add_time,update_time
-		from user where group_id = 0 and del_flag = 0;
+		select id,user_name,user_passwd,user_priv,group_id,is_online,img_name,add_time,update_time
+		from user where del_flag = 0;
 	</select>
+	
+	<select id="selectAllManages" resultMap="user">
+		select id,user_name,user_passwd,user_priv,group_id,is_online,img_name,add_time,update_time
+		from user where user_priv = 1 and del_flag = 0;
+	</select>
+	
 	<select id="selectByUser" parameterType="com.keda.webDemo.umcs.dao.dto.User" resultMap="user">
-		select id,user_name,user_passwd,user_priv,is_online,group_id,img_path,add_time,update_time
+		select id,user_name,user_passwd,user_priv,is_online,group_id,img_name,add_time,update_time
 		from user where
 		<if test="userName != null and userName != ''">
 			user_name = #{userName} and
@@ -35,14 +41,14 @@
 		del_flag = 0
 	</select>
 	<select id="selectByGroupId" resultMap="user">
-		select id,user_name,user_passwd,user_priv,group_id,is_online,img_path,add_time,update_time
+		select id,user_name,user_passwd,user_priv,group_id,is_online,img_name,add_time,update_time
 		from user where group_id = #{groupId} and del_flag = 0;
 	</select>
 	<insert id="insert" parameterType="com.keda.webDemo.umcs.dao.dto.User">
 		insert into user
 		(user_name,user_passwd,user_priv,group_id,add_time)
 		values
-		(#{userName},#{userPasswd},#{userPriv},#{groupId},#{addTime}});
+		(#{userName},#{userPasswd},#{userPriv},#{groupId},#{addTime});
 	</insert>
 	<update id="update" parameterType="com.keda.webDemo.umcs.dao.dto.User">
 		update user set
@@ -52,17 +58,20 @@
 		<if test="userPasswd != null and userPasswd != ''">
 			user_passwd = #{userPasswd},
 		</if>
-		<if test="userPriv != null and userPriv != ''">
+		<if test="userPriv != null">
 			user_priv = #{userPriv},
 		</if>
-		<if test="groupId != null and groupId != ''">
+		<if test="groupId != null">
 			group_id = #{groupId},
 		</if>
-		<if test="isOnline != null and isOnline != ''">
+		<if test="isOnline != null">
 			is_online = #{isOnline},
 		</if>
-		<if test="imgPath != null and imgPath != ''">
-			img_path = #{imgPath},
+		<if test="imgName != null and imgName != ''">
+			img_name = #{imgName},
+		</if>
+		<if test="updateTime != null">
+			update_time = #{updateTime},
 		</if>
 		del_flag = 0
 		where id = #{id}

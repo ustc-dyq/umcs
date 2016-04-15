@@ -48,6 +48,12 @@ public interface UserDao {
 	public List<User> selectAll();
 	
 	/**
+	 * 查询所有的管理员用户
+	 * @return
+	 */
+	public List<User> selectAllManages();
+	
+	/**
 	 * 根据用户的用户名和密码查询用户信息
 	 * @param user
 	 * @return
