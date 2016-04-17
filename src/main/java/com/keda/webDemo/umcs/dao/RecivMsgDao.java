@@ -28,6 +28,13 @@ public interface RecivMsgDao {
 	public int insert(RecivMsg recivMsg);
 	
 	/**
+	 * 更新已读状态
+	 * @param id
+	 * @return
+	 */
+	public int updateReadState(int id);
+	
+	/**
 	 * 删除接收到的信息
 	 * @param id
 	 * @return

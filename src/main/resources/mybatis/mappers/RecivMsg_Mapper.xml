@@ -5,26 +5,35 @@
 <mapper namespace="com.keda.webDemo.umcs.dao.RecivMsg">
 	<resultMap type="com.keda.webDemo.umcs.dao.dto.RecivMsg" id="recivMsg">
 		<id property="id" column="id" />
-		<result property="sendUserId" column="send_user_id" />
+		<result property="sendMsgId" column="send_msg_id" />
+		<result property="sendId" column="send_id" />
 		<result property="recivUserId" column="reciv_user_id" />
-		<result property="msg" column="msg" />
-		<result property="msgType" column="msg_type" />
-		<result property="recivTime" column="reciv_time" />
+		<result property="isRead" column="is_read" />	
 	</resultMap>
 	<select id="selectByUserId" resultMap="recivMsg">
-		select id,send_user_id,reciv_user_id,msg,msg_type,reciv_time
+		select id,send_msg_id,send_id,reciv_user_id,is_read
 		from reciv_msg where reciv_user_id = #{recivUserId}
-		<if test="sendUserId != null">
-			and send_user_id = #{sendUserId}
+		<if test="sendId != null">
+			and send_id = #{sendId}
+		</if>
+		<if test="isRead != null">
+			and is_read = #{isRead}
 		</if>
 	</select>
 	
 	<insert id="insert" parameterType="com.keda.webDemo.umcs.dao.dto.RecivMsg">
 		insert into reciv_msg
-		(send_user_id,reciv_user_id,msg,msg_type,reciv_time)
+		(send_msg_id,send_id,reciv_user_id)
 		values
-		(#{sendUserId},#{recivUserId},#{msg},#{msgType},#{recivTime});
+		(#{sendMsgId},#{sendId},#{recivUserId});
 	</insert>
+	
+	<update id="updateReadState" parameterType="java.lang.Integer">
+		update send_msg set
+		is_read=1
+		where id = #{id}
+	</update>
+	
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from reciv_msg
 		where id = #{id}

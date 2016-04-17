@@ -12,12 +12,13 @@ import java.util.Date;
 public class SendMsg {
 
 	private int id;
-	private int sendUserId;
-	private int recivUserId;
+	private Integer sendUserId;
+	private Integer recivId;
+	private Integer sendType;
 	private String msg;               //发送消息内容
-	private int msgType;              //发送消息类型，1代表文本，2代表图片，3代表文件
+	private Integer msgType;              //发送消息类型，1代表文本，2代表图片，3代表文件
 	private Date sendTime;            //发送消息时间
-	private int delFlag;
+	private Integer delFlag;
 	
 	/**
 	 * @return the id
@@ -36,31 +37,39 @@ public class SendMsg {
 	/**
 	 * @return the sendUserId
 	 */
-	public int getSendUserId() {
+	public Integer getSendUserId() {
 		return sendUserId;
 	}
 	
 	/**
 	 * @param sendUserId the sendUserId to set
 	 */
-	public void setSendUserId(int sendUserId) {
+	public void setSendUserId(Integer sendUserId) {
 		this.sendUserId = sendUserId;
 	}
 	
 	/**
 	 * @return the recivUserId
 	 */
-	public int getRecivUserId() {
-		return recivUserId;
+	public Integer getRecivId() {
+		return recivId;
 	}
 	
 	/**
 	 * @param recivUserId the recivUserId to set
 	 */
-	public void setRecivUserId(int recivUserId) {
-		this.recivUserId = recivUserId;
+	public void setRecivId(Integer recivId) {
+		this.recivId = recivId;
 	}
 	
+	public Integer getSendType() {
+		return sendType;
+	}
+
+	public void setSendType(Integer sendType) {
+		this.sendType = sendType;
+	}
+
 	/**
 	 * @return the msg
 	 */
@@ -78,14 +87,14 @@ public class SendMsg {
 	/**
 	 * @return the msgType
 	 */
-	public int getMsgType() {
+	public Integer getMsgType() {
 		return msgType;
 	}
 	
 	/**
 	 * @param msgType the msgType to set
 	 */
-	public void setMsgType(int msgType) {
+	public void setMsgType(Integer msgType) {
 		this.msgType = msgType;
 	}
 	
@@ -106,14 +115,14 @@ public class SendMsg {
 	/**
 	 * @return the delFlag
 	 */
-	public int getDelFlag() {
+	public Integer getDelFlag() {
 		return delFlag;
 	}
 	
 	/**
 	 * @param delFlag the delFlag to set
 	 */
-	public void setDelFlag(int delFlag) {
+	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
 	}
 		

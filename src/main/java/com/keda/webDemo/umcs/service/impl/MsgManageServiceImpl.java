@@ -23,8 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.keda.webDemo.umcs.constants.Constants;
 import com.keda.webDemo.umcs.dao.RecivMsgDao;
 import com.keda.webDemo.umcs.dao.SendMsgDao;
+import com.keda.webDemo.umcs.dao.UserDao;
 import com.keda.webDemo.umcs.dao.dto.RecivMsg;
 import com.keda.webDemo.umcs.dao.dto.SendMsg;
+import com.keda.webDemo.umcs.dao.dto.User;
 import com.keda.webDemo.umcs.dto.Data;
 import com.keda.webDemo.umcs.service.MsgManageService;
 import com.keda.webDemo.umcs.tools.ComparatorSendMsg;
@@ -39,30 +41,10 @@ public class MsgManageServiceImpl implements MsgManageService {
 	private SendMsgDao sendMsgDao;
 	@Resource
 	private RecivMsgDao recivMsgDao;
+	@Resource
+	private UserDao userDao;
 	
 	
-	private void saveMsg(int sendUserId, int recivUserId, String msg, int msgType) {
-		
-		log.info("保存用户消息入库");
-		SendMsg sendMsg = new SendMsg();
-		RecivMsg recivMsg = new RecivMsg();
-		sendMsg.setSendUserId(sendUserId);
-		sendMsg.setRecivUserId(recivUserId);
-		sendMsg.setMsg(msg);
-		sendMsg.setMsgType(msgType);
-		sendMsg.setSendTime(new Date());
-		recivMsg.setSendUserId(sendUserId);
-		recivMsg.setRecivUserId(recivUserId);
-		recivMsg.setMsg(msg);
-		recivMsg.setMsgType(msgType);
-		recivMsg.setRecivTime(new Date());
-		//将消息分别保存至发送表和接收表
-		sendMsgDao.insert(sendMsg);
-		recivMsgDao.insert(recivMsg);
-		
-	}
-
-
 
 	/* (non-Javadoc)
 	 * @see com.keda.webDemo.umcs.service.MsgManageService#sendMsg(javax.servlet.http.HttpServletRequest)
@@ -73,41 +55,86 @@ public class MsgManageServiceImpl implements MsgManageService {
 		log.info("用户发送消息");
 		Data data = new Data();
 		int sendUserId = Integer.valueOf(request.getParameter("sendUserId"));
-		int recivUserId = Integer.valueOf(request.getParameter("recivUserId"));		
-		log.info("用户" + sendUserId + "发送消息");
+		int recivId = Integer.valueOf(request.getParameter("recivId"));	
+		int sendType = Integer.valueOf(request.getParameter("sendType"));
 		String msg = request.getParameter("msg");
-		saveMsg(sendUserId, recivUserId, msg, Constants.ISFILE);
+		int msgType = Integer.valueOf(request.getParameter("msgType"));
+		log.info("用户" + sendUserId + "发送消息" + msg);
+		int sendMsgId = this.saveSendMsg(sendUserId, recivId, sendType, msg, msgType);
+		this.saveRecivMsg(sendMsgId, sendUserId, recivId, sendType);
+		//saveMsg(sendUserId, recivUserId, msg, Constants.ISFILE);
 		data.setSuccess(true);
 		return data;
 		
 	}
+	
+	private int saveSendMsg(int sendUserId,int recivId,int sendType,String msg,int msgType) {
+		SendMsg sendMsg = new SendMsg();
+		sendMsg.setSendUserId(sendUserId);
+		sendMsg.setRecivId(recivId);
+		sendMsg.setSendType(sendType);
+		sendMsg.setMsg(msg);
+		sendMsg.setMsgType(msgType);
+		sendMsgDao.insert(sendMsg);
+		return sendMsg.getId();
+	}
+	
+	private void saveRecivMsg(int sendMsgId,int sendUserId,int recivId,int sendType) {
+		RecivMsg rmsg = new RecivMsg();
+		rmsg.setSendMsgId(sendMsgId);
+		if(Constants.ONETOONE == sendType) {
+			rmsg.setSendId(sendUserId);
+			rmsg.setRecivUserId(recivId);
+			recivMsgDao.insert(rmsg);
+		} else if(Constants.ONETOMORE == sendType) {
+			List<User> users = userDao.selectAll();
+			for(User user : users) {
+				if(user.getId() != sendUserId) {
+					rmsg.setSendId(recivId);
+					rmsg.setRecivUserId(user.getId());
+					recivMsgDao.insert(rmsg);
+				}
+			}
+		} else {
+			List<User> users = userDao.selectByGroupId(recivId);
+			for(User user : users) {
+				if(user.getId() != sendUserId) {
+					rmsg.setSendId(recivId);
+					rmsg.setRecivUserId(user.getId());
+					recivMsgDao.insert(rmsg);
+				}
+			}
+		}
+	}
 
+	
 
 
 	/* (non-Javadoc)
 	 * @see com.keda.webDemo.umcs.service.MsgManageService#recivMsg(int)
 	 */
 	@Override
-	public Data recivMsg(int recivUserId, int sendUserId) {
+	public Data recivMsg(int recivUserId, int sendId) {
 		
 		log.info("用户" + recivUserId + "接收消息");
 		Data data = new Data();	
 		RecivMsg recivMsg = new RecivMsg();
 		recivMsg.setRecivUserId(recivUserId);
-		if(0 != sendUserId) {
-			recivMsg.setSendUserId(sendUserId);
-		}
+		recivMsg.setSendId(sendId);;
 		List<RecivMsg> recivMsgs = recivMsgDao.selectByUserId(recivMsg);
 		if(null == recivMsgs || 0 >= recivMsgs.size()) {
 			data.setSuccess(false);
 			data.setMsg("暂无消息");
 			return data;
 		}
+		List<SendMsg> sMsgs = new ArrayList<SendMsg>();
 		for(RecivMsg msg : recivMsgs) {
+			SendMsg sMsg = sendMsgDao.select(msg.getSendMsgId());
+			sMsgs.add(sMsg);
 			recivMsgDao.delete(msg.getId());
 		}
 		data.setSuccess(true);
-		data.setData(recivMsgs);
+		data.setData(sMsgs);
 		return data;
 	}
 
@@ -115,30 +142,48 @@ public class MsgManageServiceImpl implements MsgManageService {
 	 * @see com.keda.webDemo.umcs.service.MsgManageService#queryHistoryMsg(int, int, int)
 	 */
 	@Override
-	public Data queryHistoryMsg(int recivUserId, int sendUserId, int limit) {
+	public Data queryHistoryMsg(int recivId, int sendUserId, int sendType, int limit) {
 		
 		SendMsg sendMsg = new SendMsg();
 		List<SendMsg> sendMsgs = new ArrayList<SendMsg>();
-		sendMsg.setSendUserId(sendUserId);
-		sendMsg.setRecivUserId(recivUserId);
-		int count = sendMsgDao.selectCount(sendMsg);
-		int offset = 0;
-		if(count > limit) {
-			offset = count-limit;
+		if(Constants.ONETOONE == sendType) {
+			sendMsg.setSendUserId(sendUserId);
+			sendMsg.setSendType(sendType);
+			sendMsgs = sendMsgDao.selectByUserId(sendMsg, new RowBounds(0,limit));
+		} else {
+			sendMsg.setRecivId(recivId);
+			sendMsg.setSendType(sendType);
+			sendMsgs = sendMsgDao.selectByUserId(sendMsg, new RowBounds(0,limit));
 		}
-		sendMsgs.addAll(sendMsgDao.selectByUserId(sendMsg, new RowBounds(offset,limit)));
-		sendMsg.setSendUserId(recivUserId);
-		sendMsg.setRecivUserId(sendUserId);
-		count = sendMsgDao.selectCount(sendMsg);
-		offset = 0;
-		if(count > limit) {
-			offset = count-limit;
-		}
-		sendMsgs.addAll(sendMsgDao.selectByUserId(sendMsg, new RowBounds(offset,limit)));
-		Collections.sort(sendMsgs,new ComparatorSendMsg());
+		
 		Data data = new Data();
 		data.setSuccess(true);
 		data.setData(sendMsgs);
+		return data;
+	}
+
+
+
+	@Override
+	public Data queryNotReadMsg(int recivUserId) {
+		Data data = new Data();	
+		RecivMsg recivMsg = new RecivMsg();
+		recivMsg.setRecivUserId(recivUserId);
+		recivMsg.setIsRead(Constants.NOTREAD);;
+		List<RecivMsg> recivMsgs = recivMsgDao.selectByUserId(recivMsg);
+		if(null == recivMsgs || 0 >= recivMsgs.size()) {
+			data.setSuccess(false);
+			data.setMsg("暂无消息");
+			return data;
+		}
+		List<SendMsg> sMsgs = new ArrayList<SendMsg>();
+		for(RecivMsg msg : recivMsgs) {
+			SendMsg sMsg = sendMsgDao.select(msg.getSendMsgId());
+			sMsgs.add(sMsg);
+			recivMsgDao.updateReadState(msg.getId());
+		}
+		data.setSuccess(true);
+		data.setData(sMsgs);
 		return data;
 	}
 

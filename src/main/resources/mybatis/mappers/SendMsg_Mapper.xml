@@ -6,15 +6,21 @@
 	<resultMap type="com.keda.webDemo.umcs.dao.dto.SendMsg" id="sendMsg">
 		<id property="id" column="id" />
 		<result property="sendUserId" column="send_user_id" />
-		<result property="recivUserId" column="reciv_user_id" />
+		<result property="recivId" column="reciv_id" />
+		<result property="sendType" column="send_type" />
 		<result property="msg" column="msg" />
 		<result property="msgType" column="msg_type" />
 		<result property="sendTime" column="send_time" />
 		<result property="delFlag" column="del_flag" />
 	</resultMap>
 	<select id="select" resultMap="sendMsg">
-		select id,send_user_id,reciv_user_id,msg,msg_type,send_time
+		select id,send_user_id,reciv_id,send_type,msg,msg_type,send_time
 		from send_msg where id = #{id} and del_flag = 0;
+	</select>
+	
+	<select id="selectByDays" resultMap="sendMsg">
+		select id,send_user_id,reciv_id,send_type,msg,msg_type,send_time
+		from send_msg where TO_DAYS(send_time)&lt;TO_DAYS(NOW())-days;
 	</select>
 	
 	<select id="selectCount" resultType="java.lang.Integer">
@@ -23,29 +29,60 @@
 		<if test="sendUserId != null">
 			send_user_id = #{sendUserId} and
 		</if>
-		<if test="recivUserId != null">
-			reciv_user_id = #{recivUserId} and
+		<if test="recivId != null">
+			reciv_id = #{recivId} and
 		</if> 
 		del_flag = 0;
 	</select>
 	
+	<select id="selectHistoryMsg" resultMap="sendMsg">
+		select id,send_user_id,reciv_id,send_type,msg,msg_type,send_time
+		from send_msg where
+		send_user_id = #{sendUserId} or
+		reciv_id = #{send_user_id} and
+		<if test="sendType != null">
+			send_type = #{sendType} and
+		</if>
+		del_flag = 0 ORDER BY id DESC
+	</select>
+	
+	<select id="selectBySendUserId" resultMap="sendMsg">
+		select id,send_user_id,reciv_id,send_type,msg,msg_type,send_time
+		from send_msg where
+		send_user_id = #{sendUserId} or
+		reciv_id = #{sendUserId} and
+		send_type = #{sendType} and
+		del_flag = 0 ORDER BY id DESC
+	</select>
+	
+	<select id="selectByRecivId" resultMap="sendMsg">
+		select id,send_user_id,reciv_id,send_type,msg,msg_type,send_time
+		from send_msg where
+		reciv_id = #{recivId} and
+		send_type = #{sendType} and
+		del_flag = 0 ORDER BY id DESC
+	</select>
+	
 	<select id="selectByUserId" resultMap="sendMsg">
-		select id,send_user_id,reciv_user_id,msg,msg_type,send_time
+		select id,send_user_id,reciv_id,send_type,msg,msg_type,send_time
 		from send_msg where
 		
 		<if test="sendUserId != null">
 			send_user_id = #{sendUserId} and
 		</if>
-		<if test="recivUserId != null">
-			reciv_user_id = #{recivUserId} and
+		<if test="recivId != null">
+			reciv_id = #{recivId} and
+		</if>
+		<if test="sendType != null">
+			send_type = #{sendType} and
 		</if>
 		del_flag = 0
 	</select>
-	<insert id="insert" parameterType="com.keda.webDemo.umcs.dao.dto.SendMsg">
+	<insert id="insert" parameterType="com.keda.webDemo.umcs.dao.dto.SendMsg" useGeneratedKeys="true" keyProperty="id">
 		insert into send_msg
-		(send_user_id,reciv_user_id,msg,msg_type)
+		(send_user_id,reciv_id,send_type,msg,msg_type)
 		values
-		(#{sendUserId},#{recivUserId},#{msg},#{msgType});
+		(#{sendUserId},#{recivId},#{sendType},#{msg},#{msgType});
 	</insert>
 	<update id="delete" parameterType="java.lang.Integer">
 		update send_msg set

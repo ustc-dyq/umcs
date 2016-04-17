@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemadesigner version="6.5">
 <source>
-<database charset="utf8" collation="utf8_general_ci">demo</database>
+<database charset="latin1" collation="latin1_swedish_ci">demo</database>
 </source>
 <canvas zoom="100">
 <tables>
@@ -23,7 +23,7 @@
   `del_flag` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标记，1代表删除',
   PRIMARY KEY (`id`),
   UNIQUE KEY `USER_NAME` (`user_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8</sql_create_table>
 </table>
 <table name="send_msg" view="standard">
 <left>25</left>
@@ -34,6 +34,7 @@
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `send_user_id` int(11) NOT NULL,
   `reciv_user_id` int(11) NOT NULL,
+  `send_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1点对点，2一对多，3多对多',
   `msg` varchar(256) NOT NULL COMMENT '发送的消息，文件则是路径',
   `msg_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '消息类型：1是文本，2是图片，3是其他文件',
   `send_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -51,10 +52,11 @@
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `send_user_id` int(11) NOT NULL,
   `reciv_user_id` int(11) NOT NULL,
+  `send_type` tinyint(4) NOT NULL DEFAULT '1',
   `msg` varchar(256) NOT NULL DEFAULT '',
-  `msg_type` tinyint(4) NOT NULL DEFAULT '1',
+  `msg_type` tinyint(4) unsigned NOT NULL DEFAULT '1',
   `reciv_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `is_read` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否接收',
+  `is_read` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否查看',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
 </table>

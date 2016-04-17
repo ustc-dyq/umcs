@@ -8,6 +8,7 @@
 package com.keda.webDemo.umcs.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -70,6 +71,27 @@ public class SendMsgDaoImpl implements SendMsgDao {
 	@Override
 	public int selectCount(SendMsg sendMsg) {
 		return sqlSession.selectOne("com.keda.webDemo.umcs.dao.SendMsg.selectCount",sendMsg);
+	}
+
+	@Override
+	public List<SendMsg> selectHistoryMsg(Map<String, Object> param, RowBounds rowBounds) {
+		
+		return sqlSession.selectList("com.keda.webDemo.umcs.dao.SendMsg.selectHistoryMsg",param,rowBounds);
+		
+	}
+
+	@Override
+	public List<SendMsg> selectBySendUserId(SendMsg sendMsg, RowBounds rowBounds) {
+		
+		return sqlSession.selectList("com.keda.webDemo.umcs.dao.SendMsg.selectBySendUserId",sendMsg,rowBounds);
+		
+	}
+
+	@Override
+	public List<SendMsg> selectByRecivId(SendMsg sendMsg, RowBounds rowBounds) {
+		
+		return sqlSession.selectList("com.keda.webDemo.umcs.dao.SendMsg.selectByRecivId",sendMsg,rowBounds);
+	
 	}
 
 }

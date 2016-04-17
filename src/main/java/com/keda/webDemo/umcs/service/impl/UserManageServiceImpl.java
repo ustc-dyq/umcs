@@ -147,12 +147,12 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 
 	@Override
-	public Data uploadFile(MultipartFile file, int sendUserId, int recivUserId) {
+	public Data uploadFile(MultipartFile file, int sendUserId) {
 		
 		log.info("用户" + sendUserId + "上传文件");
 		Data data = new Data();
 		String fileName = file.getOriginalFilename();
-		String newFileName = sendUserId + "-" + new Date().getTime() + String.valueOf(fileName);
+		String newFileName = sendUserId + "-" + new Date().getTime() + "-" + String.valueOf(fileName);
 		String localPath = Constants.FILESAVEPATH + newFileName;
 		try {
 			FilesUtil.uploadFile(file,localPath);
@@ -162,19 +162,9 @@ public class UserManageServiceImpl implements UserManageService {
 			log.info("上传失败：" + e.getStackTrace());
 			return data;
 		}
-		String remoteUrl = Constants.FILEURL + newFileName;
-		// 保存文件信息入库
-		UploadFile uploadFile = new UploadFile();
-		uploadFile.setSendUserId(sendUserId);
-		uploadFile.setRecivUserId(recivUserId);
-		uploadFile.setOriginName(fileName);
-		uploadFile.setNewName(newFileName);
-		uploadFile.setLocalPath(localPath);
-		uploadFile.setRemoteUrl(remoteUrl);
-		uploadFile.setAddTime(new Date());
-		uploadFileDao.insert(uploadFile);
+		
 		data.setSuccess(true);
-		data.setData(remoteUrl);
+		data.setData(newFileName);
 		return data;
 		
 	}

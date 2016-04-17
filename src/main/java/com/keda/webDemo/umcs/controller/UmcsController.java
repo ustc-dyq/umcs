@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.keda.webDemo.umcs.dao.dto.UploadFile;
+import com.keda.webDemo.umcs.constants.Constants;
 import com.keda.webDemo.umcs.dto.Data;
 import com.keda.webDemo.umcs.service.MsgManageService;
 import com.keda.webDemo.umcs.service.UserManageService;
@@ -379,14 +379,8 @@ public class UmcsController {
 		log.info("用户校验成功，开始接收消息");
 		response.setCharacterEncoding("utf-8");
 		int recivUserId = Integer.valueOf(request.getParameter("recivUserId"));
-		int sendUserId;
-		String sendId = request.getParameter("sendUserId");
-		if(null == sendId || "".equals(sendId)) {
-			sendUserId = 0;
-		} else {
-			sendUserId = Integer.valueOf(sendId);
-		}
-		Data data = msgManageService.recivMsg(recivUserId, sendUserId);
+		int sendId = Integer.valueOf(request.getParameter("sendId"));
+		Data data = msgManageService.recivMsg(recivUserId, sendId);
 		log.info("接收消息：" + toJson(data));
 		try {
 			response.getWriter().println(toJson(data));
@@ -406,10 +400,11 @@ public class UmcsController {
         Data data = new Data();
         
 		try {			
-			int recivUserId = Integer.valueOf(request.getParameter("recivUserId"));
+			int recivId = Integer.valueOf(request.getParameter("recivId"));
 			int sendUserId = Integer.valueOf(request.getParameter("sendUserId"));
+			int sendType = Integer.valueOf(request.getParameter("sendType"));
 			int limit = Integer.valueOf(request.getParameter("limit"));
-			data = msgManageService.queryHistoryMsg(recivUserId, sendUserId, limit);
+			data = msgManageService.queryHistoryMsg(recivId, sendUserId,sendType, limit);
 			log.info("查询历史消息：" + toJson(data));
 		} catch(NumberFormatException e) {
 			log.error("查询历史参数有误" + e);
@@ -433,10 +428,9 @@ public class UmcsController {
 		
 		try {			
 			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-			int recivUserId = Integer.valueOf(request.getParameter("recivUserId"));
 			int sendUserId = Integer.valueOf(request.getParameter("sendUserId"));
 			MultipartFile file = multiRequest.getFile("file");
-			data = userManageService.uploadFile(file, sendUserId, recivUserId);
+			data = userManageService.uploadFile(file, sendUserId);
 			log.info("上传文件结果：" + toJson(data));
 		} catch(NumberFormatException e) {
 			log.error("上传文件参数有误" + e);
@@ -504,16 +498,15 @@ public class UmcsController {
 	public void download(HttpServletRequest request, HttpServletResponse response) {
 		
 		log.info("用户校验成功，开始下载文件");
-		response.setCharacterEncoding("utf-8");
-		int id = Integer.valueOf(request.getParameter("id"));
-		UploadFile uploadFile = userManageService.queryFileInfo(id);
+		String fileName = request.getParameter("fileName");
+		String originFileName = fileName.substring(fileName.lastIndexOf("-")+1, fileName.length());
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("multipart/form-data");
-		response.setHeader("Content-Disposition", "attachment;fileName=" + uploadFile.getLocalPath());
+		response.setHeader("Content-Disposition", "attachment;fileName=" + originFileName);
 
 		try {
 			
-			InputStream inputStream = new FileInputStream(uploadFile.getLocalPath());
+			InputStream inputStream = new FileInputStream(Constants.FILESAVEPATH + fileName);
 			OutputStream outputStream = response.getOutputStream();
 			FilesUtil.read(inputStream, outputStream);
 

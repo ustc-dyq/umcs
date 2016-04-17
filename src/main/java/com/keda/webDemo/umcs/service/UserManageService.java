@@ -21,7 +21,7 @@ public interface UserManageService {
 	public Data login(String userName, String userPasswd);
 	public Data logout(int userId);
 	public Data uploadHeadImg(MultipartFile imgFile, int userId);
-	public Data uploadFile(MultipartFile file, int sendUserId, int recivUserId);
+	public Data uploadFile(MultipartFile file, int sendUserId);
 	public UploadFile queryFileInfo(int id);
 	public Data queryFileList(Integer recivUserId, Integer sendUserId);
 	public Data recivFile(Integer recivUserId);

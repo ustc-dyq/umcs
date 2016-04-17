@@ -53,6 +53,13 @@ public class RecivMsgDaoImpl implements RecivMsgDao {
 	
 	}
 
+	@Override
+	public int updateReadState(int id) {
+		
+		return sqlSession.update("com.keda.webDemo.umcs.dao.RecivMsg.updateReadState",id);
+	
+	}
+
 }
 
 
