@@ -13,6 +13,7 @@ public class SendMsg {
 
 	private int id;
 	private Integer sendUserId;
+	private String sendUserName;
 	private Integer recivId;
 	private Integer sendType;
 	private String msg;               //发送消息内容
@@ -48,6 +49,20 @@ public class SendMsg {
 		this.sendUserId = sendUserId;
 	}
 	
+	/**
+	 * @return the sendUserName
+	 */
+	public String getSendUserName() {
+		return sendUserName;
+	}
+
+	/**
+	 * @param sendUserName the sendUserName to set
+	 */
+	public void setSendUserName(String sendUserName) {
+		this.sendUserName = sendUserName;
+	}
+
 	/**
 	 * @return the recivUserId
 	 */

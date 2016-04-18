@@ -152,7 +152,7 @@ public class UserManageServiceImpl implements UserManageService {
 		log.info("用户" + sendUserId + "上传文件");
 		Data data = new Data();
 		String fileName = file.getOriginalFilename();
-		String newFileName = sendUserId + "-" + new Date().getTime() + "-" + String.valueOf(fileName);
+		String newFileName = sendUserId + new Date().getTime() + "-" + String.valueOf(fileName);
 		String localPath = Constants.FILESAVEPATH + newFileName;
 		try {
 			FilesUtil.uploadFile(file,localPath);

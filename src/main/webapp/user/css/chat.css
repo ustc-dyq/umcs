@@ -93,6 +93,105 @@ div#sendMsg {
 	float: right;
 }
 
+div#sendModule {
+	width: 80%;
+	height: auto;
+	float:right;
+}
+
+div#recivModule {
+	width: 80%;
+	height: auto;
+	float:left;
+}
+
+
+div#sendUserName {
+	width: 50px;
+	height: 40px;
+	font-family: 微软雅黑, 宋体;
+	font-size: 20px;
+	color:#00ff00;
+	text-align: center;
+	vertical-align: middle;
+	float: right;
+}
+
+div#recivUserName {
+	width: 50px;
+	height: 40px;
+	font-family: 微软雅黑, 宋体;
+	font-size: 20px;
+	color:#00ff00;
+	text-align: center;
+	vertical-align: middle;
+	float: left;
+}
+
+div#sendFile{
+	width:auto;
+	max-width:300px;
+	height:auto;
+	font-family: 微软雅黑, 宋体;
+	font-size: 20px;
+	color:#008040;
+	border: 1px solid #c0c0c0;
+	float: right;
+}
+
+div#recivFile{
+	width:auto;
+	max-width:300px;
+	height:auto;
+	font-family: 微软雅黑, 宋体;
+	font-size: 20px;
+	color:#008040;
+	border: 1px solid #c0c0c0;
+	float: left;
+}
+
+div#sendText{
+	width:auto;
+	max-width:300px;
+	height:auto;
+	padding:1px;
+	font-family: 微软雅黑, 宋体;
+	font-size: 15px;
+	color:#000000;
+	float: right;
+}
+
+div#recivText{
+	width:auto;
+	max-width:300px;
+	padding:1px;
+	font-family: 微软雅黑, 宋体;
+	font-size: 15px;
+	color:#000000;
+	float: left;
+}
+
+div#sendImg{
+	width: 100px;
+	height: 100px;
+	position: relative;
+	vertical-align: middle;
+	float: right;
+}
+
+div#recivImg{
+	width: 100px;
+	height: 100px;
+	position: relative;
+	vertical-align: middle;
+	float: left;
+}
+
+#img {
+	width: 100px;
+	height: 100px;
+}
+
 #send {
 	width: 100px;
 	height: 35px;

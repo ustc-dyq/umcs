@@ -130,6 +130,8 @@ public class MsgManageServiceImpl implements MsgManageService {
 		List<SendMsg> sMsgs = new ArrayList<SendMsg>();
 		for(RecivMsg msg : recivMsgs) {
 			SendMsg sMsg = sendMsgDao.select(msg.getSendMsgId());
+			User user = userDao.select(sMsg.getSendUserId());
+			sMsg.setSendUserName(user.getUserName());
 			sMsgs.add(sMsg);
 			recivMsgDao.delete(msg.getId());
 		}
@@ -149,11 +151,16 @@ public class MsgManageServiceImpl implements MsgManageService {
 		if(Constants.ONETOONE == sendType) {
 			sendMsg.setSendUserId(sendUserId);
 			sendMsg.setSendType(sendType);
-			sendMsgs = sendMsgDao.selectByUserId(sendMsg, new RowBounds(0,limit));
+			sendMsgs = sendMsgDao.selectBySendUserId(sendMsg, new RowBounds(0,limit));
 		} else {
 			sendMsg.setRecivId(recivId);
 			sendMsg.setSendType(sendType);
-			sendMsgs = sendMsgDao.selectByUserId(sendMsg, new RowBounds(0,limit));
+			sendMsgs = sendMsgDao.selectByRecivId(sendMsg, new RowBounds(0,limit));
+		}
+		
+		for(SendMsg sMsg : sendMsgs) {
+			User user = userDao.select(sMsg.getSendUserId());
+			sMsg.setSendUserName(user.getUserName());
 		}
 		
 		Data data = new Data();

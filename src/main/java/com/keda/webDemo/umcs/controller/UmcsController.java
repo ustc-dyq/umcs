@@ -429,7 +429,15 @@ public class UmcsController {
 		try {			
 			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
 			int sendUserId = Integer.valueOf(request.getParameter("sendUserId"));
-			MultipartFile file = multiRequest.getFile("file");
+			int msgType = Integer.valueOf(request.getParameter("msgType"));
+			MultipartFile file = null;
+			if(Constants.ISIMG == msgType) {
+				file = multiRequest.getFile("imgFile");
+			} else if(Constants.ISFILE == msgType) {
+				file = multiRequest.getFile("file");
+			} else {
+				throw new NumberFormatException();
+			}
 			data = userManageService.uploadFile(file, sendUserId);
 			log.info("上传文件结果：" + toJson(data));
 		} catch(NumberFormatException e) {
@@ -499,7 +507,7 @@ public class UmcsController {
 		
 		log.info("用户校验成功，开始下载文件");
 		String fileName = request.getParameter("fileName");
-		String originFileName = fileName.substring(fileName.lastIndexOf("-")+1, fileName.length());
+		String originFileName = fileName.substring(fileName.indexOf("-")+1, fileName.length());
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("multipart/form-data");
 		response.setHeader("Content-Disposition", "attachment;fileName=" + originFileName);
