@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 	var limit = 0;
-	recivId = 2;
+	recivId = getUrlParam("recivId");
 	sendType = 1;
 	var userInfo = eval("(" + getCookie('1') + ")");
 	head = userInfo.userName + ":" + userInfo.userPasswd;

@@ -65,7 +65,7 @@ div#openFile {
 	background-image: url(../img/openFile.jpg);
 	background-size: 40px 40px;
 	position: absolute;
-	left: 15%;
+	left: 20%;
 	
 }
 
@@ -75,7 +75,7 @@ div#openMsg {
 	background-image: url(../img/openMsg.jpg);
 	background-size: 40px 40px;
 	position: absolute;
-	left: 20%;
+	left: 30%;
 	
 }
 

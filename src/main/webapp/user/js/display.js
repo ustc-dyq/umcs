@@ -38,7 +38,7 @@ $(document).ready(function() {
 			var userInfo = eval("(" + getCookie(userId) + ")");
 			head = userInfo.userName + ":" + userInfo.userPasswd;
 			if(loginSuccess = true) {
-				$.post(baseUrl + "/api/logout", {
+				$.post("/api/logout", {
 					head : head,
 					userId : userInfo.id
 				});
@@ -121,15 +121,7 @@ function method(id,msg) {
 	
 }
 
-function logout() {
-	userInfo = getUserInfo();
-	head = getHead(userInfo);
-	$.cookie(userName + "login=1");
-	$.post(baseUrl + "/api/logout", {
-		head : head,
-		userId : userInfo.id
-	});
-}
+
 
 function createUserPage() {
 	$( "#right" ).load( "user.html", function( response, status, xhr ) {
@@ -151,32 +143,5 @@ function createfriendPage() {
 		});
 }
 
-function getUserInfo() {
-	data = getCookie('data');
-	d = eval("(" + data + ")");
-	return d.data;
-}
-
-function getHead(userInfo) {
-	userName = userInfo.userName;
-	userPasswd = userInfo.userPasswd;
-	head = userName + ":" + userPasswd;
-	return head;
-}
 
 
-function getCookie(name) {
-	var cookieValue = null;
-	if (document.cookie && document.cookie != '') {
-		var cookies = document.cookie.split(';');
-		for (var i = 0; i < cookies.length; i++) {
-			var cookie = jQuery.trim(cookies[i]);
-			if (cookie.substring(0, name.length + 1) == (name + '=')) {
-				cookieValue = decodeURIComponent(cookie
-						.substring(name.length + 1));
-				break;
-			}
-		}
-	}
-	return cookieValue;
-}
