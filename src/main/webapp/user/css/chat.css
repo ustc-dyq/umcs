@@ -107,24 +107,20 @@ div#recivModule {
 
 
 div#sendUserName {
-	width: 50px;
-	height: 40px;
+	width: auto;
+	height: 30px;
 	font-family: 微软雅黑, 宋体;
 	font-size: 20px;
 	color:#00ff00;
-	text-align: center;
-	vertical-align: middle;
 	float: right;
 }
 
 div#recivUserName {
-	width: 50px;
-	height: 40px;
+	width: auto;
+	height: 30px;
 	font-family: 微软雅黑, 宋体;
 	font-size: 20px;
 	color:#00ff00;
-	text-align: center;
-	vertical-align: middle;
 	float: left;
 }
 

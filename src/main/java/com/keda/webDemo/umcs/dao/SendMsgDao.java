@@ -7,6 +7,7 @@
 **/
 package com.keda.webDemo.umcs.dao;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,13 @@ public interface SendMsgDao {
 	public SendMsg select(int id);
 	
 	/**
+	 * 根据主键查询发送消息
+	 * @param id
+	 * @return
+	 */
+	public List<SendMsg> selectBySendTime(Date sendTime);
+	
+	/**
 	 * 查询消息数量
 	 * @param id
 	 * @return
@@ -37,8 +45,19 @@ public interface SendMsgDao {
 	 */
 	public List<SendMsg> selectHistoryMsg(Map<String,Object> param, RowBounds rowBounds);
 	
+	
+	/**
+	 * 根据发送用户id和发送方式查询历史消息
+	 * @param sendMsg
+	 * @return
+	 */
 	public List<SendMsg> selectBySendUserId(SendMsg sendMsg, RowBounds rowBounds);
 	
+	/**
+	 * 根据接收用户id和发送方式查询历史消息
+	 * @param sendMsg
+	 * @return
+	 */
 	public List<SendMsg> selectByRecivId(SendMsg sendMsg, RowBounds rowBounds);
 	
 	/**

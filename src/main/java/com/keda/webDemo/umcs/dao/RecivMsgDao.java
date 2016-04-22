@@ -21,6 +21,13 @@ public interface RecivMsgDao {
 	public List<RecivMsg> selectByUserId(RecivMsg recivMsg);
 	
 	/**
+	 * 根据发送消息id查询接收的信息
+	 * @param id
+	 * @return
+	 */
+	public List<RecivMsg> selectBySendMsgId(int sendMsgId);
+	
+	/**
 	 * 保存接收到的信息
 	 * @param recivMsg
 	 * @return

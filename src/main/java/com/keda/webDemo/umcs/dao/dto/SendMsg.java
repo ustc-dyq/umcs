@@ -19,8 +19,7 @@ public class SendMsg {
 	private String msg;               //发送消息内容
 	private Integer msgType;              //发送消息类型，1代表文本，2代表图片，3代表文件
 	private Date sendTime;            //发送消息时间
-	private Integer delFlag;
-	
+		
 	/**
 	 * @return the id
 	 */
@@ -127,20 +126,6 @@ public class SendMsg {
 		this.sendTime = sendTime;
 	}
 
-	/**
-	 * @return the delFlag
-	 */
-	public Integer getDelFlag() {
-		return delFlag;
-	}
-	
-	/**
-	 * @param delFlag the delFlag to set
-	 */
-	public void setDelFlag(Integer delFlag) {
-		this.delFlag = delFlag;
-	}
-		
 }
 
 

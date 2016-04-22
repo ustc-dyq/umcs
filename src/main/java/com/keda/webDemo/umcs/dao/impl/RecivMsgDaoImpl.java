@@ -60,6 +60,14 @@ public class RecivMsgDaoImpl implements RecivMsgDao {
 	
 	}
 
+	/* (non-Javadoc)
+	 * @see com.keda.webDemo.umcs.dao.RecivMsgDao#selectBySendMsgId(int)
+	 */
+	@Override
+	public List<RecivMsg> selectBySendMsgId(int sendMsgId) {
+		return sqlSession.selectList("com.keda.webDemo.umcs.dao.RecivMsg.selectBySendMsgId",sendMsgId);
+	}
+
 }
 
 

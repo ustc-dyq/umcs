@@ -8,8 +8,6 @@
 package com.keda.webDemo.umcs.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -29,7 +27,6 @@ import com.keda.webDemo.umcs.dao.dto.SendMsg;
 import com.keda.webDemo.umcs.dao.dto.User;
 import com.keda.webDemo.umcs.dto.Data;
 import com.keda.webDemo.umcs.service.MsgManageService;
-import com.keda.webDemo.umcs.tools.ComparatorSendMsg;
 
 @Service
 @Transactional
@@ -82,6 +79,7 @@ public class MsgManageServiceImpl implements MsgManageService {
 	private void saveRecivMsg(int sendMsgId,int sendUserId,int recivId,int sendType) {
 		RecivMsg rmsg = new RecivMsg();
 		rmsg.setSendMsgId(sendMsgId);
+		rmsg.setSendType(sendType);
 		if(Constants.ONETOONE == sendType) {
 			rmsg.setSendId(sendUserId);
 			rmsg.setRecivUserId(recivId);
@@ -114,13 +112,14 @@ public class MsgManageServiceImpl implements MsgManageService {
 	 * @see com.keda.webDemo.umcs.service.MsgManageService#recivMsg(int)
 	 */
 	@Override
-	public Data recivMsg(int recivUserId, int sendId) {
+	public Data recivMsg(int recivUserId, int sendId, int sendType) {
 		
 		log.info("用户" + recivUserId + "接收消息");
 		Data data = new Data();	
 		RecivMsg recivMsg = new RecivMsg();
 		recivMsg.setRecivUserId(recivUserId);
 		recivMsg.setSendId(sendId);;
+		recivMsg.setSendType(sendType);
 		List<RecivMsg> recivMsgs = recivMsgDao.selectByUserId(recivMsg);
 		if(null == recivMsgs || 0 >= recivMsgs.size()) {
 			data.setSuccess(false);
@@ -186,6 +185,8 @@ public class MsgManageServiceImpl implements MsgManageService {
 		List<SendMsg> sMsgs = new ArrayList<SendMsg>();
 		for(RecivMsg msg : recivMsgs) {
 			SendMsg sMsg = sendMsgDao.select(msg.getSendMsgId());
+			User user = userDao.select(sMsg.getSendUserId());
+			sMsg.setSendUserName(user.getUserName());
 			sMsgs.add(sMsg);
 			recivMsgDao.updateReadState(msg.getId());
 		}

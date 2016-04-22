@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemadesigner version="6.5">
 <source>
-<database charset="latin1" collation="latin1_swedish_ci">demo</database>
+<database charset="utf8" collation="utf8_general_ci">test</database>
 </source>
 <canvas zoom="100">
 <tables>
@@ -23,7 +23,7 @@
   `del_flag` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标记，1代表删除',
   PRIMARY KEY (`id`),
   UNIQUE KEY `USER_NAME` (`user_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8</sql_create_table>
 </table>
 <table name="send_msg" view="standard">
 <left>25</left>
@@ -41,7 +41,7 @@
   `del_flag` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `USER_ID` (`send_user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8</sql_create_table>
 </table>
 <table name="reciv_msg" view="standard">
 <left>291</left>
@@ -52,35 +52,16 @@
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `send_msg_id` int(11) NOT NULL COMMENT '发送表主键',
   `send_id` int(11) NOT NULL,
+  `send_type` tinyint(4) NOT NULL DEFAULT '1',
   `reciv_user_id` int(11) NOT NULL,
   `is_read` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否查看',
   `add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8</sql_create_table>
-</table>
-<table name="file" view="standard">
-<left>283</left>
-<top>4</top>
-<width>246</width>
-<height>262</height>
-<sql_create_table>CREATE TABLE `file` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `send_user_id` int(11) NOT NULL,
-  `reciv_user_id` int(11) NOT NULL,
-  `origin_name` varchar(256) NOT NULL,
-  `new_name` varchar(256) NOT NULL,
-  `local_path` varchar(512) NOT NULL,
-  `remote_url` varchar(512) NOT NULL,
-  `add_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `update_time` timestamp NULL DEFAULT NULL,
-  `is_read` tinyint(4) NOT NULL DEFAULT '0',
-  `del_flag` tinyint(4) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8</sql_create_table>
 </table>
 <table name="groupinfo" view="standard">
-<left>567</left>
-<top>39</top>
+<left>308</left>
+<top>38</top>
 <width>241</width>
 <height>177</height>
 <sql_create_table>CREATE TABLE `groupinfo` (
@@ -91,7 +72,7 @@
   `update_time` timestamp NULL DEFAULT NULL,
   `del_flag` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8</sql_create_table>
 </table>
 </tables>
 </canvas>

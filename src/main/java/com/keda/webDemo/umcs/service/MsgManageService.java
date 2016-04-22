@@ -14,7 +14,7 @@ import com.keda.webDemo.umcs.dto.Data;
 public interface MsgManageService {
 
 	public Data sendMsg(HttpServletRequest request);
-	public Data recivMsg(int recivUserId, int sendId);
+	public Data recivMsg(int recivUserId, int sendId, int sendType);
 	public Data queryNotReadMsg(int recivUserId);
 	public Data queryHistoryMsg(int recivId, int sendUserId, int sendType, int limit);
 	

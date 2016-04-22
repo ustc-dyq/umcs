@@ -7,6 +7,7 @@
 **/
 package com.keda.webDemo.umcs.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -91,6 +92,16 @@ public class SendMsgDaoImpl implements SendMsgDao {
 	public List<SendMsg> selectByRecivId(SendMsg sendMsg, RowBounds rowBounds) {
 		
 		return sqlSession.selectList("com.keda.webDemo.umcs.dao.SendMsg.selectByRecivId",sendMsg,rowBounds);
+	
+	}
+
+	/* (non-Javadoc)
+	 * @see com.keda.webDemo.umcs.dao.SendMsgDao#selectByDays(int)
+	 */
+	@Override
+	public List<SendMsg> selectBySendTime(Date sendTime) {
+		
+		return sqlSession.selectList("com.keda.webDemo.umcs.dao.SendMsg.selectBySendTime",sendTime);
 	
 	}
 

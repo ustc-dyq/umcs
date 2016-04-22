@@ -2,7 +2,9 @@ $(document).ready(
 		function() {
 			var userInfo = eval("(" + getCookie(userId) + ")");
 			head = userInfo.userName + ":" + userInfo.userPasswd;
-			$("#imgShow").attr("src","/user/headImg/" + userInfo.imgName);
+			if(null != userInfo.imgName && "" != userInfo.imgName) {
+				$("#imgShow").attr("src","/user/headImg/" + userInfo.imgName);
+			}
 			$("#newName").val(userInfo.userName);
 			$("#newPasswd").val(userInfo.userPasswd);
 			$("#imgFile").change(function(){

@@ -1,10 +1,10 @@
-$(document).ready(function() {
-
-	var limit = 0;
-	recivId = getUrlParam("recivId");
-	sendType = 1;
-	var userInfo = eval("(" + getCookie('1') + ")");
-	head = userInfo.userName + ":" + userInfo.userPasswd;
+var limit = 0;
+var sendUserId = getUrlParam("sendUserId");
+var recivId = getUrlParam("recivId");
+var sendType = getUrlParam("sendType");
+var userInfo = eval("(" + getCookie(sendUserId) + ")");
+var head = userInfo.userName + ":" + userInfo.userPasswd;
+$(document).ready(function() {	
 	$("#imgFile").mouseover(function() {
 		var top = $("#openImg").offset().top;
 		var left = $("#openImg").offset().left;
@@ -12,7 +12,7 @@ $(document).ready(function() {
 			'top' : top + 45,
 			'left' : left + 20
 		});
-		$(".tip").html("打开文件");
+		$(".tip").html("打开图片");
 		$(".tip").show();
 		$("#imgFile").mouseout(function() {
 			$(".tip").hide();
@@ -93,10 +93,19 @@ $(document).ready(function() {
 		
 	});
 	
+	$("#openMsg").click(function(){
+		queryHistoryMsg();
+	});
+	
 	$("#send").click(function(){
 		var text = $("#inputText").html();
+		$("#inputText").html("");
+		if(null == text || "" == text.trim()) {
+			alert("请不要发送空消息");
+			return;
+		}
 		var oldHtml = $("#showText").html();
-		var newHtml = "<div id=\"sendModule\"><div id=\"sendUserName\">" + userInfo.userName + "</div>";
+		var newHtml = "<div id=\"sendModule\"><div id=\"sendUserName\">：" + userInfo.userName + "</div>";
 		newHtml += "<div id=\"sendText\">" + text + "</div></div>";
 		newHtml = oldHtml + newHtml;
 		sendMsg(text,1,newHtml);
@@ -118,6 +127,7 @@ $(document).ready(function() {
 				if (true == d.success) {
 					sendMsg(d.data,msgType);
 					$("#showText").html(html);
+					alert("文件发送成功");
 				} else {
 					alert(d.msg);
 				}
@@ -152,50 +162,6 @@ $(document).ready(function() {
 					});
 	}
 	
-	var recivMsg = function() {
-		var url = "/api/recivMsg?" + "head=" + head +
-		"&sendId=" + recivId +"&recivUserId=" + userInfo.id;
-		$.get(url,
-				function(data,status){
-			    var d = eval("("+data+")");
-			    if(true == d.success) {
-			    	var recivMsgs = d.data;
-			    	for(i=0;i<recivMsgs.length;i++) {
-			    		var j = i;
-			    		var oldHtml = $("#showText").html();
-			    		
-			    		newHtml = "<div id=\"recivModule\"><div id=\"recivUserName\">" + recivMsgs[j].sendUserName + "</div>";
-			    		if(1 == recivMsgs[j].msgType) {
-							newHtml += "<div id=\"recivText\">" + recivMsgs[j].msg + "</div></div>";
-						} else if(2 == recivMsgs[j].msgType) {
-							var src = "/user/files/" + recivMsgs[j].msg;
-							var downloadUrl = "/api/download?head=" +head + "&fileName=" + recivMsgs[j].msg;
-							newHtml += "<div id=\"recivImg\"><img id=\"img\" src=" + src + " onclick=\"window.open('" + downloadUrl + "')\"></div></div>";
-						} else {
-							var newFileName = recivMsgs[j].msg;
-							var downloadUrl = "/api/download?head=" +head + "&fileName=" + newFileName;
-							var oldFileName = newFileName.substring(newFileName.indexOf("-")+1,newFileName.length);
-							newHtml += "<div id=\"reicvFile\"><a href=" + downloadUrl + ">文件" + oldFileName + "，点此下载</a></div></div>";
-						}
-			    		newHtml = oldHtml + newHtml;
-						$("#showText").html(newHtml);
-			    		limit += 1;
-			    	}
-				  
-			    }
-		    });
-		//setTimeout("recivMsg()",500);
-	};
-		
-	var queryUserInfo = function(userId) {
-		var url = "/api/queryUserById?" + "head=" + head +
-		"&id=" + userId;
-		$.get(url,
-				function(data,status){
-			    var d = eval("("+data+")");
-			    return d.data;
-		    });
-	};
 	
 	var queryHistoryMsg = function() {
 		limit += 5;
@@ -206,11 +172,11 @@ $(document).ready(function() {
 			    var d = eval("("+data+")");
 			    if(true == d.success) {
 			    	var recivMsgs = d.data;
-			    	var newHtml = $("#showText").html();
+			    	var newHtml="";
 			    	for(i=recivMsgs.length-1;i>=0;i--) {
 			    		var j = i;
 			    		if(recivMsgs[j].sendUserId == userInfo.id) {
-			    			newHtml += "<div id=\"sendModule\"><div id=\"sendUserName\">" + userInfo.userName + "</div>";
+			    			newHtml += "<div id=\"sendModule\"><div id=\"sendUserName\">：" + userInfo.userName + "</div>";
 			    			if(1 == recivMsgs[j].msgType) {
 			    				newHtml += "<div id=\"sendText\">" + recivMsgs[j].msg + "</div></div>";
 							} else if(2 == recivMsgs[j].msgType) {
@@ -225,7 +191,7 @@ $(document).ready(function() {
 							}				    		
 							
 			    		} else {
-			    			 newHtml += "<div id=\"recivModule\"><div id=\"recivUserName\">" + recivMsgs[j].sendUserName + "</div>";
+			    			 newHtml += "<div id=\"recivModule\"><div id=\"recivUserName\">" + recivMsgs[j].sendUserName + "：</div>";
 					    		if(1 == recivMsgs[j].msgType) {
 									newHtml += "<div id=\"recivText\">" + recivMsgs[j].msg + "</div></div>";
 								} else if(2 == recivMsgs[j].msgType) {
@@ -249,5 +215,43 @@ $(document).ready(function() {
 		
 	}
 	
-	queryHistoryMsg();
 });
+var recivMsg = function() {
+	var url = "/api/recivMsg?" + "head=" + head + "&sendId="
+	+ recivId +"&recivUserId=" + userInfo.id + "&sendType=" + sendType;
+	$.get(url,
+			function(data,status){
+		    var d = eval("("+data+")");
+		    if(true == d.success) {
+		    	var recivMsgs = d.data;
+		    	for(i=0;i<recivMsgs.length;i++) {
+		    		var j = i;
+		    		var oldHtml = $("#showText").html();
+		    		
+		    		newHtml = "<div id=\"recivModule\"><div id=\"recivUserName\">" + recivMsgs[j].sendUserName + "：</div>";
+		    		if(1 == recivMsgs[j].msgType) {
+						newHtml += "<div id=\"recivText\">" + recivMsgs[j].msg + "</div></div>";
+					} else if(2 == recivMsgs[j].msgType) {
+						var src = "/user/files/" + recivMsgs[j].msg;
+						var downloadUrl = "/api/download?head=" +head + "&fileName=" + recivMsgs[j].msg;
+						newHtml += "<div id=\"recivImg\"><img id=\"img\" src=" + src + " onclick=\"window.open('" + downloadUrl + "')\"></div></div>";
+					} else {
+						var newFileName = recivMsgs[j].msg;
+						var downloadUrl = "/api/download?head=" +head + "&fileName=" + newFileName;
+						var oldFileName = newFileName.substring(newFileName.indexOf("-")+1,newFileName.length);
+						newHtml += "<div id=\"reicvFile\"><a href=" + downloadUrl + ">文件" + oldFileName + "，点此下载</a></div></div>";
+					}
+		    		newHtml = oldHtml + newHtml;
+					$("#showText").html(newHtml);
+		    		limit += 1;
+		    	}
+			  
+		    }
+	    });
+	setTimeout("recivMsg()",500);
+	
+}
+
+recivMsg();
+
+

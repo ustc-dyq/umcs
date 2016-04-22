@@ -22,12 +22,12 @@ public class Constants {
 	/**
 	 * 上传头像的保存路径
 	 */
-	public static final String HEADIMGPATH = "D:\\workspace\\umcs\\src\\main\\webapp\\user\\headImg\\";
+	public static final String HEADIMGPATH = "D:\\umcs\\src\\main\\webapp\\user\\headImg\\";
 	
 	/**
 	 * 上传文件的保存路径
 	 */
-	public static final String FILESAVEPATH = "D:\\workspace\\umcs\\src\\main\\webapp\\user\\files\\";
+	public static final String FILESAVEPATH = "D:\\umcs\\src\\main\\webapp\\user\\files\\";
 	
 	/**
 	 * 无分组id

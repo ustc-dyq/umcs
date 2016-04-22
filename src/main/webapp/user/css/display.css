@@ -28,6 +28,17 @@ div#right {
 	border: 1px solid #c0c0c0
 }
 
+div#center {
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 30%;
+    width: 50%;
+    margin: -15% 0 0 -25%;
+    font-size:20px;
+    line-height:20px;
+}
+
 div#headImg {
 	width: 120px;
 	float: left;
@@ -48,6 +59,15 @@ div#userInfo {
 }
 
 div#newUser {
+	padding-top: 1cm;
+	height: 30px;
+	width: 90%;
+	margin-left: 5%;
+	float: left;
+	display: table;
+}
+
+div#chatToMore {
 	padding-top: 1cm;
 	height: 30px;
 	width: 90%;
@@ -97,6 +117,24 @@ div#friends {
 #createUser {
 	height: 30px;
 	width: 20%;
+	font-family: 微软雅黑, 宋体;
+	font-size: 15px;
+	color: #008000;
+	background-color: transparent;
+}
+
+#broadCast {
+	height: 30px;
+	width: 30%;
+	font-family: 微软雅黑, 宋体;
+	font-size: 15px;
+	color: #008000;
+	background-color: transparent;
+}
+
+#groupChat {
+	height: 30px;
+	width: 30%;
 	font-family: 微软雅黑, 宋体;
 	font-size: 15px;
 	color: #008000;

@@ -4,6 +4,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans    
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd    
     http://www.springframework.org/schema/tx    
@@ -15,7 +16,8 @@
     http://www.springframework.org/schema/aop
     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
     http://www.springframework.org/schema/websocket
-    http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+    http://www.springframework.org/schema/websocket/spring-websocket.xsd
+    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
 
 	<!-- 自动扫描的包名 -->
@@ -24,6 +26,7 @@
 
 	<!-- 默认的注解映射的支持 -->
 	<mvc:annotation-driven />
+	<task:annotation-driven />  
 	<mvc:resources location="/user/" mapping="/user/**" />
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"

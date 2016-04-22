@@ -28,7 +28,6 @@ import com.keda.webDemo.umcs.constants.Constants;
 import com.keda.webDemo.umcs.dto.Data;
 import com.keda.webDemo.umcs.service.MsgManageService;
 import com.keda.webDemo.umcs.service.UserManageService;
-import com.keda.webDemo.umcs.service.UserService;
 import com.keda.webDemo.umcs.tools.FilesUtil;
 
 @Controller
@@ -37,8 +36,6 @@ public class UmcsController {
 
 	private final static Logger log = LoggerFactory.getLogger(UmcsController.class);
 
-	@Resource
-	private UserService userService;
 	@Resource
 	private UserManageService userManageService;
 	@Resource
@@ -380,7 +377,8 @@ public class UmcsController {
 		response.setCharacterEncoding("utf-8");
 		int recivUserId = Integer.valueOf(request.getParameter("recivUserId"));
 		int sendId = Integer.valueOf(request.getParameter("sendId"));
-		Data data = msgManageService.recivMsg(recivUserId, sendId);
+		int sendType = Integer.valueOf(request.getParameter("sendType"));
+		Data data = msgManageService.recivMsg(recivUserId, sendId, sendType);
 		log.info("接收消息：" + toJson(data));
 		try {
 			response.getWriter().println(toJson(data));
@@ -454,21 +452,16 @@ public class UmcsController {
 
 	}
 	
-	@RequestMapping(value = "/queryFileList", method = RequestMethod.GET)
-	public void queryFileList(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/queryNotReadMsg", method = RequestMethod.GET)
+	public void queryNotReadMsg(HttpServletRequest request, HttpServletResponse response) {
 
-		log.info("用户校验成功，开始查询文件列表");
+		log.info("用户校验成功，开始查询未读消息列表");
 		response.setCharacterEncoding("utf-8");
 		Integer recivUserId = Integer.valueOf(request.getParameter("recivUserId"));
-		String sendId = request.getParameter("sendUserId");
-		Integer sendUserId = null;
-		if(null != sendId && !"".equals(sendId)) {
-			sendUserId = Integer.valueOf(sendId);
-		}
 		
 		Data data = new Data();
-		data = userManageService.queryFileList(recivUserId, sendUserId);
-		log.info("查询文件列表结果：" + toJson(data));
+		data = msgManageService.queryNotReadMsg(recivUserId);
+		log.info("查询未读消息列表结果：" + toJson(data));
 		try {
 			response.getWriter().println(toJson(data));
 		} catch (IOException e) {
@@ -477,31 +470,7 @@ public class UmcsController {
 
 	}	
 	
-	@RequestMapping(value = "/recivFile", method = RequestMethod.GET)
-	public void recivFile(HttpServletRequest request, HttpServletResponse response) {
 		
-		log.info("用户校验成功，开始接收文件");
-		response.setCharacterEncoding("utf-8");
-        Data data = new Data();
-        
-		try {			
-			Integer recivUserId = Integer.valueOf(request.getParameter("recivUserId"));
-			data = userManageService.recivFile(recivUserId);
-			log.info("接收文件结果：" + toJson(data));
-		} catch(NumberFormatException e) {
-			log.error("接收文件参数有误" + e);
-			data.setSuccess(false);
-			data.setMsg("接收文件参数有误");
-		}
-		
-		try {
-			response.getWriter().println(toJson(data));
-		} catch (IOException e) {
-			log.info("网络异常");
-		}
-
-	}
-	
 	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public void download(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -524,31 +493,6 @@ public class UmcsController {
 
 	}
 
-	@RequestMapping(value = "/deleteFile", method = RequestMethod.GET)
-	public void deleteFile(HttpServletRequest request, HttpServletResponse response) {
-		
-		log.info("用户校验成功，开始删除文件");
-		response.setCharacterEncoding("utf-8");
-        Data data = new Data();
-        
-		try {			
-			int id = Integer.valueOf(request.getParameter("id"));
-			data = userManageService.deleteFile(id);
-			log.info("删除文件结果：" + toJson(data));
-		} catch(NumberFormatException e) {
-			log.error("删除文件参数有误" + e);
-			data.setSuccess(false);
-			data.setMsg("删除文件参数有误");
-		}
-		
-		try {
-			response.getWriter().println(toJson(data));
-		} catch (IOException e) {
-			log.info("网络异常");
-		}
-
-	}
-	
 	private String toJson(Data data) {
 		JSONObject json = new JSONObject(data);
 		return json.toString();

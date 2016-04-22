@@ -12,6 +12,7 @@ public class RecivMsg {
 	private Integer id;
 	private Integer sendMsgId;
 	private Integer sendId;
+	private Integer sendType;
 	private Integer recivUserId;
 	private Integer isRead;
 	
@@ -39,6 +40,14 @@ public class RecivMsg {
 		this.sendId = sendId;
 	}
 	
+	public Integer getSendType() {
+		return sendType;
+	}
+
+	public void setSendType(Integer sendType) {
+		this.sendType = sendType;
+	}
+
 	public Integer getRecivUserId() {
 		return recivUserId;
 	}

@@ -7,29 +7,38 @@
 		<id property="id" column="id" />
 		<result property="sendMsgId" column="send_msg_id" />
 		<result property="sendId" column="send_id" />
+		<result property="sendType" column="send_type" />
 		<result property="recivUserId" column="reciv_user_id" />
 		<result property="isRead" column="is_read" />	
 	</resultMap>
 	<select id="selectByUserId" resultMap="recivMsg">
-		select id,send_msg_id,send_id,reciv_user_id,is_read
+		select id,send_msg_id,send_id,send_type,reciv_user_id,is_read
 		from reciv_msg where reciv_user_id = #{recivUserId}
 		<if test="sendId != null">
 			and send_id = #{sendId}
+		</if>
+		<if test="sendType != null">
+			and send_type = #{sendType}
 		</if>
 		<if test="isRead != null">
 			and is_read = #{isRead}
 		</if>
 	</select>
 	
+	<select id="selectBySendMsgId" resultMap="recivMsg">
+		select id,send_msg_id,send_id,send_type,reciv_user_id,is_read
+		from reciv_msg where send_msg_id = #{sendMsgId}		
+	</select>
+	
 	<insert id="insert" parameterType="com.keda.webDemo.umcs.dao.dto.RecivMsg">
 		insert into reciv_msg
-		(send_msg_id,send_id,reciv_user_id)
+		(send_msg_id,send_id,send_type,reciv_user_id)
 		values
-		(#{sendMsgId},#{sendId},#{recivUserId});
+		(#{sendMsgId},#{sendId},#{sendType},#{recivUserId});
 	</insert>
 	
 	<update id="updateReadState" parameterType="java.lang.Integer">
-		update send_msg set
+		update reciv_msg set
 		is_read=1
 		where id = #{id}
 	</update>

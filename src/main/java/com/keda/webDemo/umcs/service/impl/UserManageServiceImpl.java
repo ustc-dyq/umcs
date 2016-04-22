@@ -21,16 +21,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.keda.webDemo.umcs.constants.Constants;
-import com.keda.webDemo.umcs.dao.UploadFileDao;
+import com.keda.webDemo.umcs.dao.GroupDao;
 import com.keda.webDemo.umcs.dao.UserDao;
 import com.keda.webDemo.umcs.dao.dto.Group;
-import com.keda.webDemo.umcs.dao.dto.UploadFile;
 import com.keda.webDemo.umcs.dao.dto.User;
 import com.keda.webDemo.umcs.dto.Data;
-import com.keda.webDemo.umcs.exception.RepeatException;
-import com.keda.webDemo.umcs.service.GroupService;
 import com.keda.webDemo.umcs.service.UserManageService;
-import com.keda.webDemo.umcs.service.UserService;
 import com.keda.webDemo.umcs.tools.FilesUtil;
 
 @Service
@@ -39,13 +35,9 @@ public class UserManageServiceImpl implements UserManageService {
 	private final static Logger log = LoggerFactory.getLogger(UserManageServiceImpl.class);
 	
 	@Resource
-	private UserService userService;
-	@Resource
-	private GroupService groupService;
-	@Resource
-	private UploadFileDao uploadFileDao;
-	@Resource
 	private UserDao userDao;
+	@Resource
+	private GroupDao groupDao;
 
 	/*
 	 * (non-Javadoc)
@@ -59,16 +51,18 @@ public class UserManageServiceImpl implements UserManageService {
 
 		log.info(userName+"登录");
 		Data data = new Data();		
-		User user;
-		try {
-			user = userService.preLogin(userName, userPasswd);
-			data.setSuccess(true);
-			data.setData(user);
-		} catch (RepeatException e) {
+		User user = new User();
+		user.setUserName(userName);
+		user.setUserPasswd(userPasswd);
+		user = userDao.selectByUser(user);
+		if(Constants.LOGIN == user.getIsOnline()) {
 			data.setSuccess(false);
 			data.setMsg("登录失败，请勿重复登录！");
+		} else {
+			data.setSuccess(true);
+			data.setData(user);
 		}
-		
+				
 		return data;
 
 	}
@@ -85,14 +79,18 @@ public class UserManageServiceImpl implements UserManageService {
 
 		log.info(userName+"登录");
 		Data data = new Data();		
-		User user;
-		try {
-			user = userService.login(userName, userPasswd);
-			data.setSuccess(true);
-			data.setData(user);
-		} catch (RepeatException e) {
+		User user = new User();
+		user.setUserName(userName);
+		user.setUserPasswd(userPasswd);
+		user = userDao.selectByUser(user);
+		if(Constants.LOGIN == user.getIsOnline()) {
 			data.setSuccess(false);
 			data.setMsg("该账户已经在线，请换个账户登录！");
+		} else {
+			user.setIsOnline(Constants.LOGIN);
+			userDao.update(user);
+			data.setSuccess(true);
+			data.setData(user);
 		}
 		
 		return data;
@@ -106,7 +104,10 @@ public class UserManageServiceImpl implements UserManageService {
 	public Data logout(int userId) {
 		log.info(userId + "登出");
 		Data data = new Data();
-		userService.logOut(userId);
+		User user = userDao.select(userId);
+		user.setIsOnline(Constants.LOGOUT);
+		user.setUpdateTime(new Date());
+		userDao.update(user);
 		data.setSuccess(true);
 		return data;
 		
@@ -136,10 +137,10 @@ public class UserManageServiceImpl implements UserManageService {
 			return data;
 		}
 		
-		User user = userService.queryByUserId(userId);
+		User user = userDao.select(userId);;
 		FilesUtil.deleteFile(Constants.HEADIMGPATH + user.getImgName());
 		user.setImgName(newImgName);;
-		userService.changeUser(user);
+		userDao.update(user);
 		data.setSuccess(true);
 		data.setData(newImgName);
 		return data;
@@ -186,19 +187,19 @@ public class UserManageServiceImpl implements UserManageService {
 		List<Group> groups = new ArrayList<Group>();
 		if(Constants.MANAGEMENTPRIV == userPriv) {
 			//查询所有未分组的成员
-			users = userService.getAllUser();
+			users = userDao.selectAll();
 			//查询所有分组及其成员
-			groups = groupService.queryAllGroups();		
+			groups = groupDao.selectAll();		
 			
 		} else {
 			//查询用户详情
-			User user = userService.queryByUserId(userId);
+			User user = userDao.select(userId);
 			//查询管理员信息
-			List<User> manages = userService.getAllManages();
+			List<User> manages = userDao.selectAllManages();
 			users.addAll(manages);
 			if(Constants.NOTINGROUP != user.getGroupId()) {
-				Group group = groupService.queryByGroupId(user.getGroupId());
-				users.addAll(userService.queryByGroupId(group.getId()));
+				Group group = groupDao.select(user.getGroupId());;
+				users.addAll(userDao.selectByGroupId(group.getId()));
 				groups.add(group);
 			} else {
 				users.add(user);
@@ -213,50 +214,7 @@ public class UserManageServiceImpl implements UserManageService {
 	}
 	
 	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.keda.webDemo.umcs.service.UserManageService#createUsers(java.util.
-	 * List)
-	 */
-	@Override
-	public Data createUsers(List<User> users) {
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 暂未使用
-	 * @see
-	 * com.keda.webDemo.umcs.service.UserManageService#deleteUsers(java.util.
-	 * List)
-	 */
-	@Override
-	public Data deleteUsers(List<Integer> userIds) {
-		
-		log.info("批量删除用户");
-		for(Integer id : userIds) {
-			userService.deleteUser(id);
-		}
-		Data data = new Data();
-		data.setSuccess(true);
-		return data;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 批量删除用户，暂未实现
-	 * @see
-	 * com.keda.webDemo.umcs.service.UserManageService#changeUsers(java.util.
-	 * List)
-	 */
-	@Override
-	public Data changeUsers(List<User> users) {
-		
-		
-		return null;
-	}
+	
 
 	/* (non-Javadoc)
 	 * @see com.keda.webDemo.umcs.service.UserManageService#createUser(java.lang.String, java.lang.String)
@@ -266,14 +224,24 @@ public class UserManageServiceImpl implements UserManageService {
 		
 		log.info("创建新用户");
 		Data data = new Data();
-		try {
-			User user = userService.addUser(userName, userPasswd);
+		User user = new User();
+		user.setUserName(userName);
+		User userInfo = userDao.selectByUser(user);
+		
+		if(null != userInfo) {
+			log.info("用户已存在，添加用户失败");
+			data.setSuccess(false);
+			data.setMsg("用户已存在，添加用户失败");
+		} else {
+			user.setUserPasswd(userPasswd);
+			user.setGroupId(Constants.NOTINGROUP);
+			user.setUserPriv(Constants.NORMALPRIV);
+			user.setAddTime(new Date());
+			userDao.insert(user);
 			data.setSuccess(true);
 			data.setData(user);
-		} catch (RepeatException e) {
-			data.setSuccess(false);
-			data.setMsg(e.getMessage());
 		}
+		
 		return data;
 		
 	}
@@ -285,7 +253,7 @@ public class UserManageServiceImpl implements UserManageService {
 	public Data deleteUser(int userId) {
 		
 		log.info("删除用户");
-		userService.deleteUser(userId);
+		userDao.delete(userId);
 		Data data = new Data();
 		data.setSuccess(true);
 		return data;
@@ -304,7 +272,7 @@ public class UserManageServiceImpl implements UserManageService {
 		if(user.getUserName().equals(userName)) {
 			user.setUserPasswd(userPasswd);
 			user.setUpdateTime(new Date());
-			user = userService.changeUser(user);
+			userDao.update(user);;
 			data.setSuccess(true);
 			data.setData(user);
 		} else {
@@ -319,7 +287,7 @@ public class UserManageServiceImpl implements UserManageService {
 				user.setUserName(userName);
 				user.setUserPasswd(userPasswd);
 				user.setUpdateTime(new Date());
-				user = userService.changeUser(user);
+				userDao.update(user);
 				data.setSuccess(true);
 				data.setData(user);
 			}
@@ -333,17 +301,21 @@ public class UserManageServiceImpl implements UserManageService {
 	 * @see com.keda.webDemo.umcs.service.UserManageService#createGroup(com.keda.webDemo.umcs.dao.dto.Group)
 	 */
 	@Override
-	public Data createGroup(int userId,String groupName) {
+	public Data createGroup(int userId, String groupName) {
 		
 		log.info("创建分组");
-		Group group = groupService.queryByGroupName(groupName);
+		Group group = groupDao.selectByGroupName(groupName);
 		Data data = new Data();
 		
 		if(null != group) {
 			data.setSuccess(false);
 			data.setMsg("分组名重复！");
 		} else {
-			group = groupService.createGroup(groupName, userId);
+			group = new Group();
+			group.setGroupName(groupName);
+			group.setAddUserId(userId);
+			group.setAddTime(new Date());
+			groupDao.insert(group);
 			data.setSuccess(true);
 			data.setData(group);
 		}
@@ -360,7 +332,7 @@ public class UserManageServiceImpl implements UserManageService {
 		
 		log.info("修改分组");
 		
-		Group temp = groupService.queryByGroupName(groupName);
+		Group temp = groupDao.selectByGroupName(groupName);
 		Data data = new Data();
 		if(null != temp) {
 			data.setSuccess(false);
@@ -370,7 +342,7 @@ public class UserManageServiceImpl implements UserManageService {
 			group.setId(id);
 			group.setGroupName(groupName);
 			group.setUpdateTime(new Date());
-			groupService.changeGroup(group);
+			groupDao.update(group);
 			data.setSuccess(true);
 			data.setData(group);
 		}		
@@ -386,13 +358,13 @@ public class UserManageServiceImpl implements UserManageService {
 		
 		log.info("删除分组");
 		//删除分组中的用户
-		List<User> users = userService.queryByGroupId(groupId);
+		List<User> users = userDao.selectByGroupId(groupId);
 		for(User user : users) {
 			user.setGroupId(Constants.NOTINGROUP);
-			userService.changeUser(user);
+			userDao.update(user);
 		}
 		//删除分组信息
-		groupService.deleteGroup(groupId);
+		groupDao.delete(groupId);
 		
 		Data data = new Data();
 		data.setSuccess(true);
@@ -400,42 +372,7 @@ public class UserManageServiceImpl implements UserManageService {
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see com.keda.webDemo.umcs.service.UserManageService#addGroupMember(int, int)
-	 */
-	@Override
-	public Data addGroupMember(int userId, int groupId) {
-		
-		log.info("添加分组成员");
-		User user = new User();
-		user.setId(userId);
-		user.setGroupId(groupId);
-		user = userService.changeUser(user);
-		Data data = new Data();
-		data.setSuccess(true);
-		data.setData(user);
-		return data;
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see com.keda.webDemo.umcs.service.UserManageService#deleteGroupMember(int, int)
-	 */
-	@Override
-	public Data deleteGroupMember(int userId, int groupId) {
-		
-		log.info("删除分组成员");
-		User user = new User();
-		user.setId(userId);
-		user.setGroupId(Constants.NOTINGROUP);
-		user = userService.changeUser(user);
-		Data data = new Data();
-		data.setSuccess(true);
-		data.setData(user);
-		return data;
-		
-	}
-
+	
 	/* (non-Javadoc)
 	 * @see com.keda.webDemo.umcs.service.UserManageService#changeGroupMember(int, int)
 	 */
@@ -446,7 +383,7 @@ public class UserManageServiceImpl implements UserManageService {
 		User user = new User();
 		user.setId(userId);
 		user.setGroupId(groupId);
-		user = userService.changeUser(user);
+		userDao.update(user);
 		Data data = new Data();
 		data.setSuccess(true);
 		data.setData(user);
@@ -454,29 +391,6 @@ public class UserManageServiceImpl implements UserManageService {
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see com.keda.webDemo.umcs.service.UserManageService#queryFileInfo(int)
-	 */
-	@Override
-	public UploadFile queryFileInfo(int id) {
-		
-		return uploadFileDao.select(id);
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see com.keda.webDemo.umcs.service.UserManageService#queryFileList(int)
-	 */
-	@Override
-	public Data queryFileList(Integer recivUserId, Integer sendUserId) {
-		Data data = new Data();
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("recivUserId", recivUserId);
-		map.put("sendUserId", sendUserId);
-		data.setData(uploadFileDao.selectByUserId(map));
-		data.setSuccess(true);
-		return data;
-	}
 
 	/* (non-Javadoc)
 	 * @see com.keda.webDemo.umcs.service.UserManageService#queryUserById(int)
@@ -484,52 +398,9 @@ public class UserManageServiceImpl implements UserManageService {
 	@Override
 	public Data queryUserById(int id) {
 		Data data = new Data();
-		data.setData(userService.queryByUserId(id));
+		data.setData(userDao.select(id));
 		data.setSuccess(true);;
 		return data;
 	}
-
-	/* (non-Javadoc)
-	 * @see com.keda.webDemo.umcs.service.UserManageService#deleteFile(int)
-	 */
-	@Override
-	public Data deleteFile(int id) {
-		uploadFileDao.delete(id);
-		Data data = new Data();
-		data.setSuccess(true);
-		return data;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.keda.webDemo.umcs.service.UserManageService#recivFile(java.lang.Integer)
-	 */
-	@Override
-	public Data recivFile(Integer recivUserId) {
-		
-		Data data = new Data();
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("recivUserId", recivUserId);
-		map.put("isRead", Constants.NOTREAD);
-		List<UploadFile> files = uploadFileDao.selectByUserId(map);
-		
-		if(null == files || 0 >= files.size()) {
-			data.setSuccess(false);
-			data.setMsg("没有文件可供接收");
-			return data;
-		}
-		
-		data.setSuccess(true);
-		data.setData(files);
-		
-		for(UploadFile file : files) {
-			file.setIsRead(Constants.ISREAD);
-			file.setUpdateTime(new Date());
-			uploadFileDao.update(file);			
-		}
-		
-		return data;
-	}
-
-	
 
 }
